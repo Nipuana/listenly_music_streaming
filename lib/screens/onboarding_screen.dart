@@ -14,19 +14,19 @@ class OnboardingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
 
-            /// ==== Top Image ====
+            //Top Image 
             Padding(
               padding: const EdgeInsets.only(top: 40.0),
               child: SizedBox(
-                height: 330, // adjust if needed
+                height: 330, 
                 child: Image.asset(
-                  "assets/images/img1.png", // <-- add your image asset
+                  "assets/images/img1.png", 
                   fit: BoxFit.contain,
                 ),
               ),
             ),
 
-            /// ==== Bottom Panel ====
+            // Bottom Panel
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 25),
@@ -70,7 +70,7 @@ class OnboardingScreen extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  /// Page Indicator (Static for now)
+                  /// Page Indicator 
 
                   const SizedBox(height: 30),
 
