@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/screens/login_screen.dart';
 
 class LoginPopup extends StatelessWidget {
   const LoginPopup({super.key});
@@ -51,7 +52,13 @@ class LoginPopup extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
@@ -72,7 +79,13 @@ class LoginPopup extends StatelessWidget {
               width: double.infinity,
               height: 50,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  );
+                },
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Colors.blue),
                   shape: RoundedRectangleBorder(
