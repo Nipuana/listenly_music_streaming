@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/screens/login_popup.dart';
+import 'package:weplay_music_streaming/screens/onboard_popup.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
