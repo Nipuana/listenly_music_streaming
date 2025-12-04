@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/screens/forgot_password_screen.dart';
 import 'package:weplay_music_streaming/widget/app_text_field.dart';
 import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
 import 'package:weplay_music_streaming/widget/buttons/app_social_button.dart';
@@ -62,8 +63,16 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text("Forgot Password?",
-                      style: TextStyle(color: Colors.blue)),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                      );
+                    },
+                    child: Text("Forgot Password?",
+                        style: TextStyle(color: Colors.blue)),
+                  ),
                 ),
 
                 SizedBox(height: 20),
@@ -96,7 +105,11 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("Don't have an account? "),
-                    Text("SignUp", style: TextStyle(color: Colors.blue)),
+                    GestureDetector(
+                      child: Text("SignUp", 
+                      style: TextStyle(color: Colors.blue)
+                      )
+                    ),
                   ],
                 ),
               ],
