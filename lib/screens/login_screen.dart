@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/screens/forgot_password_screen.dart';
+import 'package:weplay_music_streaming/screens/signup_screen.dart';
 import 'package:weplay_music_streaming/widget/app_text_field.dart';
 import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
 import 'package:weplay_music_streaming/widget/buttons/app_social_button.dart';
 import 'package:weplay_music_streaming/widget/logo_widget.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isPasswordHidden = true;
  @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,9 +62,15 @@ class LoginScreen extends StatelessWidget {
                 AppTextField(
                   hint: "Enter your password",
                   prefixIcon: Icons.lock_outline,
-                  obscure: true,
-                  suffixIcon: Icons.visibility_outlined,
-                  onSuffixTap: () {},
+                  obscure: _isPasswordHidden,
+                  suffixIcon: _isPasswordHidden 
+                  ? Icons.visibility_outlined 
+                  : Icons.visibility_off_outlined,
+                  onSuffixTap: () {
+                    setState(() {
+                      _isPasswordHidden = !_isPasswordHidden;
+                    });
+                  },
                 ),
 
                 SizedBox(height: 10),
@@ -106,6 +119,12 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Text("Don't have an account? "),
                     GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignupScreen()),
+                        );
+                      },
                       child: Text("SignUp", 
                       style: TextStyle(color: Colors.blue)
                       )

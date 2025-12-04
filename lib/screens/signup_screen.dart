@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/screens/login_screen.dart';
 import 'package:weplay_music_streaming/widget/app_text_field.dart';
 import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
 import 'package:weplay_music_streaming/widget/buttons/app_social_button.dart';
 import 'package:weplay_music_streaming/widget/logo_widget.dart';
 
 
-class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  bool _isPasswordHidden =true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +45,7 @@ class SignupPage extends StatelessWidget {
                 const Text("Full Name"),
                 const SizedBox(height: 6),
                 const AppTextField(
-                  hint: "John Doe",
+                  hint: "Your Name",
                   prefixIcon: Icons.person_outline,
                 ),
 
@@ -60,9 +67,13 @@ class SignupPage extends StatelessWidget {
                 AppTextField(
                   hint: "Create a strong password",
                   prefixIcon: Icons.lock_outline,
-                  suffixIcon: Icons.visibility_outlined,
-                  obscure: true,
-                  onSuffixTap: () {},
+                  obscure: _isPasswordHidden,
+                  suffixIcon: _isPasswordHidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                  onSuffixTap: () {
+                    setState(() {
+                      _isPasswordHidden = !_isPasswordHidden;
+                    });
+                  },
                 ),
 
                 const SizedBox(height: 8),
@@ -127,11 +138,19 @@ class SignupPage extends StatelessWidget {
                 // Already have account?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text("Already have an account? "),
-                    Text(
-                      "Log In",
-                      style: TextStyle(color: Colors.blue),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                        );
+                      },
+                      child: Text(
+                        "Log In",
+                        style: TextStyle(color: Colors.blue),
+                      ),
                     ),
                   ],
                 ),
