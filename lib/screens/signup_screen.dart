@@ -7,7 +7,7 @@ import 'package:weplay_music_streaming/widget/logo_widget.dart';
 
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -21,12 +21,12 @@ class _SignupScreenState extends State<SignupScreen> {
       backgroundColor: Colors.grey[200],
       body: Center(
         child: Container(
-          margin: const EdgeInsets.all(25),
-          padding: const EdgeInsets.all(25),
+          margin:  EdgeInsets.all(25),
+          padding:  EdgeInsets.all(25),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25),
-            boxShadow: const [
+            boxShadow:  [
               BoxShadow(
                 color: Colors.black12,
                 blurRadius: 12,
@@ -38,32 +38,32 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const LogoWidget(size: 80),
-                const SizedBox(height: 25),
+                 LogoWidget(size: 80),
+                 SizedBox(height: 25),
 
                 // Full Name
-                const Text("Full Name"),
-                const SizedBox(height: 6),
-                const AppTextField(
+                 Text("Full Name"),
+                 SizedBox(height: 6),
+                 AppTextField(
                   hint: "Your Name",
                   prefixIcon: Icons.person_outline,
                 ),
 
-                const SizedBox(height: 20),
+                 SizedBox(height: 20),
 
                 // Email
-                const Text("Email"),
-                const SizedBox(height: 6),
-                const AppTextField(
+                 Text("Email"),
+                 SizedBox(height: 6),
+                 AppTextField(
                   hint: "your@email.com",
                   prefixIcon: Icons.email_outlined,
                 ),
 
-                const SizedBox(height: 20),
+                 SizedBox(height: 20),
 
                 // Password
-                const Text("Password"),
-                const SizedBox(height: 6),
+                 Text("Password"),
+                 SizedBox(height: 6),
                 AppTextField(
                   hint: "Create a strong password",
                   prefixIcon: Icons.lock_outline,
@@ -76,20 +76,20 @@ class _SignupScreenState extends State<SignupScreen> {
                   },
                 ),
 
-                const SizedBox(height: 8),
-                const Text(
+                 SizedBox(height: 8),
+                 Text(
                   "Must be at least 8 characters long",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
 
-                const SizedBox(height: 20),
+                 SizedBox(height: 20),
 
                 // Terms & Policy
                 RichText(
                   text: TextSpan(
                     text: "I agree to the ",
-                    style: const TextStyle(color: Colors.black),
-                    children: const [
+                    style:  TextStyle(color: Colors.black),
+                    children:  [
                       TextSpan(
                         text: "Terms & Conditions",
                         style: TextStyle(color: Colors.blue),
@@ -103,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 30),
+                 SizedBox(height: 30),
 
                 // Signup Button
                 AppButton(
@@ -111,12 +111,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: () {},
                 ),
 
-                const SizedBox(height: 25),
-                const Divider(height: 20),
-                const SizedBox(height: 10),
+                 SizedBox(height: 25),
+                 Divider(height: 20),
+                 SizedBox(height: 10),
 
-                const Center(child: Text("OR")),
-                const SizedBox(height: 20),
+                 Center(child: Text("OR")),
+                 SizedBox(height: 20),
 
                 // Social Buttons
                 AppSocialButton(
@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: () {},
                 ),
 
-                const SizedBox(height: 12),
+                 SizedBox(height: 12),
 
                 AppSocialButton(
                   text: "Continue with Apple",
@@ -133,7 +133,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   onPressed: () {},
                 ),
 
-                const SizedBox(height: 25),
+                 SizedBox(height: 25),
 
                 // Already have account?
                 Row(

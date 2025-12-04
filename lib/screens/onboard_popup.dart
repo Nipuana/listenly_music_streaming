@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/screens/login_screen.dart';
 
 class LoginPopup extends StatelessWidget {
-  const LoginPopup({super.key});
+const LoginPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class LoginPopup extends StatelessWidget {
       ),
       child: Container(
         color: Colors.white,
-        padding: const EdgeInsets.all(2),
+        padding:  EdgeInsets.all(2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -24,28 +24,28 @@ class LoginPopup extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: const Icon(Icons.close, size: 22),
+                icon:  Icon(Icons.close, size: 22),
                 onPressed: () => Navigator.pop(context),
               ),
             ),
         
             /// Title
-            const Text(
+             Text(
               "Login or sign up",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
         
-            const SizedBox(height: 8),
+             SizedBox(height: 8),
         
-            const Text(
+             Text(
               "Please select your preferred method\n"
               "to continue setting up your account",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14, color: Colors.black45),
             ),
         
-            const SizedBox(height: 25),
+             SizedBox(height: 25),
         
             /// Email Button
             SizedBox(
@@ -56,7 +56,7 @@ class LoginPopup extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  MaterialPageRoute(builder: (context) =>  LoginScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -65,14 +65,14 @@ class LoginPopup extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
+                child:  Text(
                   "Already have an account? Log in",
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ),
         
-            const SizedBox(height: 12),
+             SizedBox(height: 12),
         
             /// Phone Login
             SizedBox(
@@ -83,37 +83,37 @@ class LoginPopup extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  MaterialPageRoute(builder: (context) =>  LoginScreen()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.blue),
+                  side:  BorderSide(color: Colors.blue),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
+                child:  Text(
                   "Sign up with us",
                   style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
               ),
             ),
         
-            const SizedBox(height: 20),
+             SizedBox(height: 20),
         
             /// Google + Apple Buttons
         
-            const SizedBox(height: 25),
+             SizedBox(height: 25),
         
             /// Footer Text
-            const Text(
+             Text(
               "If you are creating a new account,\n"
               "Terms & Conditions and Privacy Policy will apply.",
               style: TextStyle(fontSize: 12, color: Colors.black45),
               textAlign: TextAlign.center,
             ),
         
-            const SizedBox(height: 15),
+             SizedBox(height: 15),
           ],
         ),
       ),
