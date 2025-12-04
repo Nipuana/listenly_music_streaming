@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AppTextFeild extends StatelessWidget {
+class AppTextField extends StatelessWidget {
   final String hint;
   final IconData prefixIcon;
   final IconData? suffixIcon;
   final bool obscure;
   final VoidCallback? onSuffixTap;
 
-  const AppTextFeild({super.key, 
+  const AppTextField({super.key, 
     required this.hint,
     required this.prefixIcon,
     this.suffixIcon,

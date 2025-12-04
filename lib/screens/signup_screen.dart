@@ -1,177 +1,144 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/widget/app_text_field.dart';
+import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
+import 'package:weplay_music_streaming/widget/buttons/app_social_button.dart';
+import 'package:weplay_music_streaming/widget/logo_widget.dart';
 
-class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // Title
-          Positioned(
-            top: 80,
-            left: 0,
-            right: 0,
-            child: const Text(
-              "Register",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+      backgroundColor: Colors.grey[200],
+      body: Center(
+        child: Container(
+          margin: const EdgeInsets.all(25),
+          padding: const EdgeInsets.all(25),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(25),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 12,
+                offset: Offset(0, 4),
+              )
+            ],
           ),
-
-          Positioned(
-            top: 150,
-            left: 20,
-            right: 20,
+          child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                /// email seciton
-                const Text(
-                  "E-mail",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
+                const LogoWidget(size: 80),
+                const SizedBox(height: 25),
+
+                // Full Name
+                const Text("Full Name"),
                 const SizedBox(height: 6),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: "Enter your email",
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                const AppTextField(
+                  hint: "John Doe",
+                  prefixIcon: Icons.person_outline,
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
-                /// password seciton
-                const Text(
-                  "Password",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
+                // Email
+                const Text("Email"),
                 const SizedBox(height: 6),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: "Enter your password",
-                    suffixIcon: const Icon(Icons.visibility_off_outlined),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
+                const AppTextField(
+                  hint: "your@email.com",
+                  prefixIcon: Icons.email_outlined,
                 ),
 
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
 
-                /// confirm password section
-                const Text(
-                  "Confirm Password",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
+                // Password
+                const Text("Password"),
                 const SizedBox(height: 6),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: "Enter your password again",
-                    suffixIcon: const Icon(Icons.visibility_off_outlined),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                AppTextField(
+                  hint: "Create a strong password",
+                  prefixIcon: Icons.lock_outline,
+                  suffixIcon: Icons.visibility_outlined,
+                  obscure: true,
+                  onSuffixTap: () {},
+                ),
+
+                const SizedBox(height: 8),
+                const Text(
+                  "Must be at least 8 characters long",
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+
+                const SizedBox(height: 20),
+
+                // Terms & Policy
+                RichText(
+                  text: TextSpan(
+                    text: "I agree to the ",
+                    style: const TextStyle(color: Colors.black),
+                    children: const [
+                      TextSpan(
+                        text: "Terms & Conditions",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                      TextSpan(text: " and "),
+                      TextSpan(
+                        text: "Privacy Policy",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ],
                   ),
+                ),
+
+                const SizedBox(height: 30),
+
+                // Signup Button
+                AppButton(
+                  text: "Sign Up",
+                  onPressed: () {},
+                ),
+
+                const SizedBox(height: 25),
+                const Divider(height: 20),
+                const SizedBox(height: 10),
+
+                const Center(child: Text("OR")),
+                const SizedBox(height: 20),
+
+                // Social Buttons
+                AppSocialButton(
+                  text: "Continue with Google",
+                  icon: Icons.g_mobiledata,
+                  onPressed: () {},
+                ),
+
+                const SizedBox(height: 12),
+
+                AppSocialButton(
+                  text: "Continue with Apple",
+                  icon: Icons.apple,
+                  onPressed: () {},
                 ),
 
                 const SizedBox(height: 25),
 
-                // Sign-Up button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: const Text(
-                      "Sign-Up",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // or 
+                // Already have account?
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("or Register with"),
+                    Text("Already have an account? "),
+                    Text(
+                      "Log In",
+                      style: TextStyle(color: Colors.blue),
                     ),
-                    Expanded(child: Divider()),
                   ],
-                ),
-
-                const SizedBox(height: 20),
-
-                // google button
-                Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/google.png", height: 20),
-                      const SizedBox(width: 10),
-                      const Text("Sign up with Google"),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 15),
-
-                // apple button
-                Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset("assets/apple.png", height: 22),
-                      const SizedBox(width: 10),
-                      const Text("Sign up with Apple"),
-                    ],
-                  ),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

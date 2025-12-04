@@ -1,169 +1,109 @@
-
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/widget/app_text_field.dart';
+import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
+import 'package:weplay_music_streaming/widget/buttons/app_social_button.dart';
+import 'package:weplay_music_streaming/widget/logo_widget.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       body: Center(
         child: Container(
-          width: 350,
-          height: 600,
+          margin: EdgeInsets.all(25),
+          padding: EdgeInsets.all(25),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(25),
             boxShadow: [
-              BoxShadow(color: Colors.black12, blurRadius: 10),
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 12,
+                offset: Offset(0, 4),
+              )
             ],
           ),
-          child: Stack(
-            children: [
-              // Logo at the top
-              Positioned(
-                top: 40,
-                left: 0,
-                right: 0,
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/logo.png', // Replace with your logo
-                      height: 80,
-                    ),
-                  ],
-                ),
-              ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
 
-              // Form fields
-              Positioned(
-                top: 150,
-                left: 20,
-                right: 20,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Email"),
-                    const SizedBox(height: 8),
-                    TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.email_outlined),
-                        hintText: 'your@email.com',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text("Password"),
-                    const SizedBox(height: 8),
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        hintText: 'Enter your password',
-                        suffixIcon: const Icon(Icons.visibility_off),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text("Forgot Password?"),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                LogoWidget(size: 80),
+                SizedBox(height: 25),
 
-              // Login Button
-              Positioned(
-                top: 350,
-                left: 20,
-                right: 20,
-                child: ElevatedButton(
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Email"),
+                ),
+                SizedBox(height: 6),
+                AppTextField(
+                  hint: "your@email.com",
+                  prefixIcon: Icons.email_outlined,
+                ),
+
+                SizedBox(height: 20),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Password"),
+                ),
+                SizedBox(height: 6),
+                AppTextField(
+                  hint: "Enter your password",
+                  prefixIcon: Icons.lock_outline,
+                  obscure: true,
+                  suffixIcon: Icons.visibility_outlined,
+                  onSuffixTap: () {},
+                ),
+
+                SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text("Forgot Password?",
+                      style: TextStyle(color: Colors.blue)),
+                ),
+
+                SizedBox(height: 20),
+
+                AppButton(
+                  text: "Log In",
                   onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  child: const Text("Log In"),
                 ),
-              ),
 
-              // Social Buttons
-              Positioned(
-                top: 420,
-                left: 20,
-                right: 20,
-                child: Column(
+                SizedBox(height: 25),
+                Text("OR"),
+                SizedBox(height: 25),
+
+                AppSocialButton(
+                  text: "Continue with Google",
+                  icon: Icons.g_mobiledata,
+                  onPressed: () {},
+                ),
+
+                SizedBox(height: 12),
+
+                AppSocialButton(
+                  text: "Continue with Apple",
+                  icon: Icons.apple,
+                  onPressed: () {},
+                ),
+
+                SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("OR"),
-                    const SizedBox(height: 10),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: const Text("Continue with Google"),
-                    ),
-                    const SizedBox(height: 10),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                      ),
-                      child: const Text("Continue with Apple"),
-                    ),
+                    Text("Don't have an account? "),
+                    Text("SignUp", style: TextStyle(color: Colors.blue)),
                   ],
                 ),
-              ),
-
-              // Sign Up link
-              Positioned(
-                bottom: 20,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account? "),
-                      GestureDetector(
-                        onTap: () {},
-                        child: const Text(
-                          "Sign Up",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
-   }
+  }
 }
