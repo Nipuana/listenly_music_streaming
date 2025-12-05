@@ -9,6 +9,8 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    final emailController = TextEditingController();
     return Scaffold(
       backgroundColor:  Color(0xffe8eefc),
       body: Center(
@@ -101,6 +103,7 @@ class ForgotPasswordScreen extends StatelessWidget {
           
                  AppTextField(
                   hint: "your@email.com",
+                  error: "Enter your email",
                   prefixIcon: Icons.email_outlined,
                 ),
           
