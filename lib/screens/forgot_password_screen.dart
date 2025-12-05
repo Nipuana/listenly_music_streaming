@@ -29,105 +29,109 @@ class ForgotPasswordScreen extends StatelessWidget {
                 )
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Back to Login
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
-                  child: Row(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Back to Login
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                    child: Row(
+                      children:  [
+                        Icon(Icons.arrow_back, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          "Back to Login",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                        
+                   SizedBox(height: 25),
+                        
+                  // Mail Icon Circle
+                  Center(
+                    child: Container(
+                      height: 70,
+                      width: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child:  Icon(
+                        Icons.mail_outline,
+                        color: Colors.blue,
+                        size: 34,
+                      ),
+                    ),
+                  ),
+                        
+                   SizedBox(height: 25),
+                        
+                  // Title
+                   Center(
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                        
+                   SizedBox(height: 10),
+                        
+                  // Subtitle
+                   Center(
+                    child: Text(
+                      "No worries! Enter your email address\nand we'll send you a code to reset your password.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ),
+                        
+                   SizedBox(height: 25),
+                        
+                   Text("Email Address"),
+                   SizedBox(height: 6),
+                        
+                   AppTextField(
+                    controller: emailController,
+                    hint: "your@email.com",
+                    error: "Enter your email",
+                    prefixIcon: Icons.email_outlined,
+                  ),
+                        
+                   SizedBox(height: 20),
+                        
+                  AppButton(
+                    text: "Send Reset Code",
+                    onPressed: () {},
+                  ),
+                        
+                   SizedBox(height: 25),
+                        
+                  // Footer: Remember password?
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children:  [
-                      Icon(Icons.arrow_back, size: 20),
-                      SizedBox(width: 8),
+                      Text("Remember your password? "),
                       Text(
-                        "Back to Login",
-                        style: TextStyle(fontSize: 14),
+                        "Log In",
+                        style: TextStyle(color: Colors.blue),
                       ),
                     ],
                   ),
-                ),
-          
-                 SizedBox(height: 25),
-          
-                // Mail Icon Circle
-                Center(
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child:  Icon(
-                      Icons.mail_outline,
-                      color: Colors.blue,
-                      size: 34,
-                    ),
-                  ),
-                ),
-          
-                 SizedBox(height: 25),
-          
-                // Title
-                 Center(
-                  child: Text(
-                    "Forgot Password?",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-          
-                 SizedBox(height: 10),
-          
-                // Subtitle
-                 Center(
-                  child: Text(
-                    "No worries! Enter your email address\nand we'll send you a code to reset your password.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                ),
-          
-                 SizedBox(height: 25),
-          
-                 Text("Email Address"),
-                 SizedBox(height: 6),
-          
-                 AppTextField(
-                  hint: "your@email.com",
-                  error: "Enter your email",
-                  prefixIcon: Icons.email_outlined,
-                ),
-          
-                 SizedBox(height: 20),
-          
-                AppButton(
-                  text: "Send Reset Code",
-                  onPressed: () {},
-                ),
-          
-                 SizedBox(height: 25),
-          
-                // Footer: Remember password?
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
-                    Text("Remember your password? "),
-                    Text(
-                      "Log In",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
