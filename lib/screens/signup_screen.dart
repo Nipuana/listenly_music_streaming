@@ -46,6 +46,7 @@ class _SignupScreenState extends State<SignupScreen> {
                  SizedBox(height: 6),
                  AppTextField(
                   hint: "Your Name",
+                  error: "Enter your Name",
                   prefixIcon: Icons.person_outline,
                 ),
 
@@ -56,6 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
                  SizedBox(height: 6),
                  AppTextField(
                   hint: "your@email.com",
+                  error: "enter your email",
                   prefixIcon: Icons.email_outlined,
                 ),
 
@@ -66,6 +68,7 @@ class _SignupScreenState extends State<SignupScreen> {
                  SizedBox(height: 6),
                 AppTextField(
                   hint: "Create a strong password",
+                  error: "enter your password",
                   prefixIcon: Icons.lock_outline,
                   obscure: _isPasswordHidden,
                   suffixIcon: _isPasswordHidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,

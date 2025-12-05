@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/screens/forgot_password_screen.dart';
 import 'package:weplay_music_streaming/screens/signup_screen.dart';
 import 'package:weplay_music_streaming/widget/app_text_field.dart';
@@ -49,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 6),
                 AppTextField(
                   hint: "your@email.com",
+                  error: "enter your email",
                   prefixIcon: Icons.email_outlined,
                 ),
 
@@ -61,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 6),
                 AppTextField(
                   hint: "Enter your password",
+                  error: "please enter your password",
                   prefixIcon: Icons.lock_outline,
                   obscure: _isPasswordHidden,
                   suffixIcon: _isPasswordHidden 
@@ -92,7 +95,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 AppButton(
                   text: "Log In",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+                    );
+                  },
                 ),
 
                 SizedBox(height: 25),

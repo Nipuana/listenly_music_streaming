@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
   final String hint;
+  final String error;
   final IconData prefixIcon;
   final IconData? suffixIcon;
   final bool obscure;
@@ -9,6 +10,7 @@ class AppTextField extends StatelessWidget {
 
   const AppTextField({super.key, 
     required this.hint,
+    required this.error,
     required this.prefixIcon,
     this.suffixIcon,
     this.obscure = false,
@@ -23,6 +25,7 @@ class AppTextField extends StatelessWidget {
         filled: true,
         fillColor: Colors.grey.shade100,
         hintText: hint,
+        errorText: error,
         prefixIcon: Icon(prefixIcon),
 
         suffixIcon: suffixIcon != null
