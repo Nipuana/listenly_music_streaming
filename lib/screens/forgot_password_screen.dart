@@ -63,7 +63,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       height: 70,
                       width: 70,
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.15),
+                        color: Colors.blue.withAlpha(20),
                         shape: BoxShape.circle,
                       ),
                       child:  Icon(
@@ -119,7 +119,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         
                    SizedBox(height: 25),
                         
-                  // Footer: Remember password?
+                  //Remember password
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children:  [

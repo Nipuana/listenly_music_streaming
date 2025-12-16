@@ -5,7 +5,8 @@ class AppSocialButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onPressed;
 
-  const AppSocialButton({super.key, 
+  const AppSocialButton({
+    super.key,
     required this.text,
     required this.icon,
     required this.onPressed,
@@ -13,25 +14,25 @@ class AppSocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 20),
-            SizedBox(width: 12),
-            Text(
-              text,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-            ),
-          ],
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: 20),
+        label: Text(text),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.grey.shade100,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: BorderSide(color: Colors.grey.shade300),
+          ),
+          textStyle: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
