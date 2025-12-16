@@ -1,34 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/constant/app_colors.dart';
+import 'package:weplay_music_streaming/constant/app_spacing.dart';
 
-class MyBottomNavigation extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onTap;
+class BottomNavBarExample extends StatefulWidget {
+  const BottomNavBarExample({super.key});
 
-  const MyBottomNavigation({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
-  });
+  @override
+  State<BottomNavBarExample> createState() => _BottomNavBarExampleState();
+}
+
+class _BottomNavBarExampleState extends State<BottomNavBarExample> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index == 2) {
+      // Search button action
+      print('Search button pressed');
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: onTap,
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "Home"),
+    return Scaffold(
+      body: Center(
+        child: Text('Selected index: $_selectedIndex'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _onItemTapped(2),
+        backgroundColor: AppColors.secondary,
+        child: const Icon(Icons.search, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8,
+        color: AppColors.surface,
+        elevation: 8,
+        child: SizedBox(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildTabItem(Icons.home, "Home", 0),
+              _buildTabItem(Icons.library_music, "Library", 1),
+              const SizedBox(width: 56), 
+              _buildTabItem(Icons.favorite, "My Likes", 3),
+              _buildTabItem(Icons.person, "Profile", 4),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: "Search"),
-            
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: "Profile"),
-      ],
+  Widget _buildTabItem(IconData icon, String label, int index) {
+    final isSelected = _selectedIndex == index;
+    final color = isSelected ? AppColors.primary : AppColors.textSecondary;
+
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: color),
+          AppSpacing.gap2,
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/constant/app_colors.dart';
 import 'package:weplay_music_streaming/constant/app_radius.dart';
 import 'package:weplay_music_streaming/constant/app_text.dart';
 
@@ -34,13 +33,13 @@ class AppButton extends StatelessWidget {
         label: Text(
           text,
           style: AppText.bodyMedium.copyWith(
-            color: foregroundColor ?? Colors.white,
+            color: foregroundColor ?? theme.colorScheme.onPrimary,
             fontWeight: AppText.medium,
           ),
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor ?? theme.colorScheme.primary,
-          foregroundColor: foregroundColor ?? Colors.white,
+          foregroundColor: foregroundColor ?? theme.colorScheme.onPrimary,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
           elevation: 0,
         ),
