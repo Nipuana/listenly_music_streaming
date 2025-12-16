@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -9,7 +8,6 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
-        backgroundColor: CupertinoColors.systemBlue,
       ),
       body: const Center(
         child: Text('Welcome to the Dashboard!'),

@@ -4,12 +4,12 @@ import 'package:weplay_music_streaming/constant/app_colors.dart';
 ThemeData getApplicationTheme() {
   return ThemeData(
     useMaterial3: true,
-     fontFamily: 'Roboto',      
-    
+    fontFamily: 'Roboto',
+
     // Scaffold Background
     scaffoldBackgroundColor: AppColors.background,
-    
-    // Color Scheme (Material 3) 
+
+    // Color Scheme
     colorScheme: ColorScheme.light(
       primary: AppColors.primary,
       secondary: AppColors.secondary,
