@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/constant/app_colors.dart';
+import 'package:weplay_music_streaming/constant/app_radius.dart';
+import 'package:weplay_music_streaming/constant/app_spacing.dart';
+import 'package:weplay_music_streaming/constant/app_text.dart';
 import 'package:weplay_music_streaming/screens/onboard_popup.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -31,13 +35,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: 600,
+            Expanded(
               child: PageView.builder(
                 itemCount: _slides.length,
                 onPageChanged: (index) {
@@ -46,82 +51,94 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   });
                 },
                 itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        _slides[index]["image"]!,
-                        height: 400,
-                        fit: BoxFit.contain,
-                      ),
-                       SizedBox(height: 20),
-                      Text(
-                        _slides[index]["title"]!,
-                        style:  TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                       SizedBox(height: 8),
-                      Text(
-                        _slides[index]["subtitle"]!,
-                        style:
-                             TextStyle(fontSize: 15, color: Colors.grey),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.x6,
+                      vertical: AppSpacing.x6,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Image.asset(
+                            _slides[index]["image"]!,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        Text(
+                          _slides[index]["title"]!,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: AppText.bold,
+                            color: AppColors.textPrimary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3),
+                        Text(
+                          _slides[index]["subtitle"]!,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY6),
+                      ],
+                    ),
                   );
                 },
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _slides.length,
                 (index) => AnimatedContainer(
-                  duration:  Duration(milliseconds: 300),
-                  margin:  EdgeInsets.symmetric(horizontal: 4),
+                  duration: const Duration(milliseconds: 250),
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
                   width: _currentPage == index ? 20 : 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: _currentPage == index ? Colors.blue : Colors.grey,
-                    borderRadius: BorderRadius.circular(4),
+                    color:
+                        _currentPage == index ? AppColors.primary : AppColors.border,
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
             ),
-
-             Spacer(),
-
-            
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal: 25, vertical: 40),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.x6,
+                AppSpacing.x6,
+                AppSpacing.x6,
+                AppSpacing.x8,
+              ),
               child: SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 52,
                 child: ElevatedButton(
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: Colors.white,
-                      shape:  RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
+                      backgroundColor: AppColors.surface,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
                         ),
                       ),
-                      builder: (_) =>  LoginPopup(),
+                      builder: (_) => const LoginPopup(),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: theme.colorScheme.primary,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppRadius.xl,
                     ),
                   ),
-                  child:  Text(
-                    "Get started",
+                  child: const Text(
+                    'Get started',
                     style: TextStyle(fontSize: 17, color: Colors.white),
                   ),
                 ),

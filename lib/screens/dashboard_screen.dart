@@ -1,19 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weplay_music_streaming/common/my_bottom_navigation.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-        backgroundColor: CupertinoColors.systemBlue,
-      ),
-      body: const Center(
-        child: Text('Welcome to the Dashboard!'),
-      ),
-    );
+    return const MyBottomNavigation();
   }
 }
