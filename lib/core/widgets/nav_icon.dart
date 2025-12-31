@@ -42,4 +42,4 @@ class NavIcon extends StatelessWidget {
       ),
     );
   }
-  }
+}

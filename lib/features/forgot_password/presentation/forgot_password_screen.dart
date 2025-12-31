@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/constant/app_colors.dart';
 import 'package:weplay_music_streaming/constant/app_spacing.dart';
 import 'package:weplay_music_streaming/constant/app_text.dart';
-import 'package:weplay_music_streaming/screens/login_screen.dart';
-import 'package:weplay_music_streaming/widget/app_text_field.dart';
-import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
+import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
+import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -68,7 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             height: 72,
                             width: 72,
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.12),
+                              color: AppColors.primary.withValues(alpha:0.12),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(

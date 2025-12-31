@@ -3,8 +3,9 @@ import 'package:weplay_music_streaming/constant/app_colors.dart';
 import 'package:weplay_music_streaming/constant/app_radius.dart';
 import 'package:weplay_music_streaming/constant/app_spacing.dart';
 import 'package:weplay_music_streaming/constant/app_text.dart';
-import 'package:weplay_music_streaming/screens/login_screen.dart';
-import 'package:weplay_music_streaming/widget/buttons/app_button.dart';
+
+import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
 
 class LoginPopup extends StatelessWidget {
 const LoginPopup({super.key});
