@@ -4,16 +4,6 @@ description: "A new Flutter project."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-flutter_native_splash:
-  color: "#000000"              
-  image: assets/images/logo.png        
-  android: true
-  ios: true
-  web: true                       
-
-  android_12:
-    image: assets/images/logo.png
-    color: "#000000"
 
 
 # The following defines the version and build number for your application.
@@ -47,7 +37,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^3.0.3
-  flutter_native_splash: ^2.4.7
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   font_awesome_flutter: ^10.1.0

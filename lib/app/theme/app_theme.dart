@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/constant/app_colors.dart';
+import 'package:weplay_music_streaming/core/constants/app_colors.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(

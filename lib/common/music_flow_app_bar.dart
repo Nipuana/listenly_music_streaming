@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constant/app_colors.dart';
+import '../core/constants/app_colors.dart';
 
 class MusicFlowAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

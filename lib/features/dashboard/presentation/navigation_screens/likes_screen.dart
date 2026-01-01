@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/constant/app_text.dart';
+import 'package:weplay_music_streaming/core/constants/app_text.dart';
 
 class LikesScreen extends StatelessWidget {
   const LikesScreen({super.key});

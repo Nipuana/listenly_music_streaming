@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../constant/app_colors.dart';
-import '../constant/app_radius.dart';
-import '../constant/app_text.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_radius.dart';
+import '../core/constants/app_text.dart';
 
 class MySnack {
 	static void show(

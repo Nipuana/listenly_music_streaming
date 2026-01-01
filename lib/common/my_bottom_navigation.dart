@@ -5,7 +5,7 @@ import 'package:weplay_music_streaming/features/dashboard/presentation/navigatio
 import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/likes_screen.dart';
 import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/profile_screen.dart';
 import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/search_screen.dart';
-import 'package:weplay_music_streaming/constant/app_colors.dart';
+import 'package:weplay_music_streaming/core/constants/app_colors.dart';
 
 class MyBottomNavigation extends StatefulWidget {
   const MyBottomNavigation({super.key});
