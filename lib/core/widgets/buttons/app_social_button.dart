@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/core/constants/app_colors.dart';
-import 'package:weplay_music_streaming/core/constants/app_radius.dart';
-import 'package:weplay_music_streaming/core/constants/app_text.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 
 class AppSocialButton extends StatelessWidget {
   final String text;

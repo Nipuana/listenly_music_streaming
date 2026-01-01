@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/core/constants/app_colors.dart';
-import 'package:weplay_music_streaming/core/constants/app_spacing.dart';
-import 'package:weplay_music_streaming/core/constants/app_text.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_social_button.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/common/music_flow_app_bar.dart';
-import 'package:weplay_music_streaming/core/constants/app_text.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

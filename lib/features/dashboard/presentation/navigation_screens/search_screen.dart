@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/core/constants/app_text.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/core/constants/app_colors.dart';
-import 'package:weplay_music_streaming/core/constants/app_radius.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 
 class AppTextField extends StatelessWidget {
   final String hint;
