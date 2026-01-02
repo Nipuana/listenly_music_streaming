@@ -6,8 +6,8 @@ class HiveTableConstant {
   static const String dbName = "listenly_music_db";
 
   // Tables -> Box : Index
-  static const int userTypeId = 0;
-  static const String userTable = "user_table";
+  static const int authTypeId = 0;
+  static const String authTable = "auth_table";
 
   static const int musicTypeId = 1;
   static const String musicTable = "music_table";
