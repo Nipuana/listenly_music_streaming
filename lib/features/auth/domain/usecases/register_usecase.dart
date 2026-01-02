@@ -7,13 +7,13 @@ import 'package:weplay_music_streaming/features/auth/data/repositories/auth_repo
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_repository.dart';
 
-class RegisterUseCaseParams extends Equatable{
+class RegisterUsecaseParams extends Equatable{
   final String username;
   final String email;
   final String? userType;
   final String password;
 
-  const RegisterUseCaseParams({
+  const RegisterUsecaseParams({
     required this.username,
     required this.email,
     this.userType,
@@ -35,7 +35,7 @@ class RegisterUseCaseParams extends Equatable{
 final registerUsecaseProvider =  Provider<RegisterUsecase>((ref){
   return RegisterUsecase(authRepository: ref.read(authRepositoryProvider));
 }); 
-class RegisterUsecase implements UsecaseWithParms<bool,RegisterUseCaseParams>{
+class RegisterUsecase implements UsecaseWithParms<bool,RegisterUsecaseParams>{
 
   final IAuthRepository _authRepository;
 
@@ -43,7 +43,7 @@ class RegisterUsecase implements UsecaseWithParms<bool,RegisterUseCaseParams>{
    : _authRepository = authRepository;
 
   @override
-  Future<Either<Failure, bool>> call(RegisterUseCaseParams params) {
+  Future<Either<Failure, bool>> call(RegisterUsecaseParams params) {
     final entity = AuthEntity(
       username: params.username,
       email: params.email,
