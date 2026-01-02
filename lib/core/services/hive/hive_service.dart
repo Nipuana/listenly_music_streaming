@@ -1,7 +1,13 @@
 import 'package:hive/hive.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weplay_music_streaming/core/constants/hive_table_constant.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
+
+
+final hiveServiceProvider = Provider<HiveService>((ref) {
+  return HiveService();
+});
 
 class HiveService {
 
@@ -43,7 +49,7 @@ class HiveService {
 
   // -------- Login User --------
   Future<AuthHiveModel?> loginUser(String email, String password) async {
-    final users = _authBox.values.where(
+    final users =  _authBox.values.where(
       (user) => user.email == email && user.password == password);
 
     if (users.isNotEmpty) {
@@ -53,13 +59,13 @@ class HiveService {
   }
 
   // -------- Get Current User --------
-  AuthHiveModel? getCurrentUser(String userId) {
-    return _authBox.get(userId);
+  Future<AuthHiveModel?> getCurrentUser() async {
+   return null;
   }
 
   // -------- Logout User --------
-  Future<void> logoutUser(String userId) async {
-    await _authBox.delete(userId);
+  Future<void> logoutUser() async {
+  
   }
 
 

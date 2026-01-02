@@ -9,20 +9,16 @@ abstract class Failure extends Equatable {
   List<Object?> get props => [message];
 }
 
-
-class LocalDatabaseFilure extends Failure{
-  const LocalDatabaseFilure({
-    String message =" local database operation faliled",
-
+class LocalDatabaseFailure extends Failure{
+  const LocalDatabaseFailure({String message =" local database operation faliled",
   }):super(message);
 }
-
 
 class ApiFailure extends Failure{
   final int? statusCode;
 
   const ApiFailure({
     this.statusCode,
-    required String message
+    String message = "API operation failed",
   }):super(message);
 }
