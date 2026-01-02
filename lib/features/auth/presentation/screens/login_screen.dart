@@ -8,6 +8,7 @@ import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.da
 import 'package:weplay_music_streaming/features/auth/presentation/screens/signup_screen.dart';
 import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/features/forgot_password/presentation/forgot_password_screen.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_social_button.dart';
 import 'package:weplay_music_streaming/core/widgets/logo_widget.dart';
@@ -40,32 +41,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   void _onForgotPasswordPressed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ForgotPasswordScreen(),
-      ),
-    );
+    AppRoutes.push(context, const ForgotPasswordScreen());
   }
 
   void _onLoginPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DashboardScreen(),
-        ),
-      );
+      AppRoutes.pushReplacement(context, const DashboardScreen());
     }
   }
 
   void _onSignupPressed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignupScreen(),
-      ),
-    );
+    AppRoutes.push(context, const SignupScreen());
   }
 
   @override

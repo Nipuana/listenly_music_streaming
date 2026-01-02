@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:weplay_music_streaming/core/constants/hive_table_constant.dart';
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
+import 'package:uuid/uuid.dart';
 
 part 'auth_hive_model.g.dart';
 
@@ -22,13 +23,13 @@ class AuthHiveModel extends HiveObject{
     final String? profilePicture;
 
     AuthHiveModel({
-      this.userId,
+      String? userId,
       required this.username,
       required this.email,
       required this.userType,
       this.password,
       this.profilePicture 
-    });
+    }) : userId = userId ?? const Uuid().v4();
 
 //From entity
     factory AuthHiveModel.fromEntity(AuthEntity entity) {

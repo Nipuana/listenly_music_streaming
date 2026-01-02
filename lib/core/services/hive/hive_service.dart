@@ -18,6 +18,7 @@ class HiveService {
    
    Hive.init(path);
    _registerAdapters();
+   openBoxes();
   }
 
   // Register Adapters

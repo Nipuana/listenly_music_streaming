@@ -8,8 +8,11 @@ import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.da
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_social_button.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/widgets/logo_widget.dart';
-import 'package:weplay_music_streaming/core/widgets/my_snack.dart';
+import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/state/auth_state.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
 
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -65,40 +68,46 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   }
 
   void _onLoginPressed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
+    AppRoutes.push(context, const LoginScreen());
   }
 
-  void _onSignupPressed() {
-    if (!(_formKey.currentState?.validate() ?? false)) {
-      return;
-    }
+  Future<void> _onSignupPressed() async {
     if (_passwordController.text != _confirmPasswordController.text) {
-      MySnack.show(
-        context,
-        message: 'Passwords do not match',
-      );
+      MysnackUtils.showError(context, 'Passwords do not match');
       return;
     }
     if (!_agreedToTerms) {
-      MySnack.show(
-        context,
-        message: 'You must agree to the Terms & Conditions and Privacy Policy',
-      );
+      MysnackUtils.showWarning(context, 'You must agree to the Terms & Conditions and Privacy Policy');
       return;
     }
-    MySnack.show(
-      context,
-      message: 'Account created',
-    );
+    if (_formKey.currentState!.validate()) {
+      ref.read(authViewModelProvider.notifier).register(
+        username: _usernameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authViewModelProvider);
+
+    //listen for state changes
+    ref.listen(authViewModelProvider, (previous, next) {
+      if (next.status == AuthStatus.error) {
+        MysnackUtils.showError(
+          context,
+          next.errorMessage ?? 'Registration failed');
+      }
+      else if (next.status == AuthStatus.registered) {
+        AppRoutes.pushReplacement(context, const LoginScreen());
+        MysnackUtils.showSuccess(context, 'Registration successful! Please log in.');
+      }
+    });
+    
+
+
     final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
