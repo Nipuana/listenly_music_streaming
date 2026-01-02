@@ -27,172 +27,172 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _disposeControllers([
+      emailController,
+      passwordController,
+    ]);
     super.dispose();
   }
 
- @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+  @override
+  Widget build(BuildContext context) => buildLoginScreen(
+        context: context,
+        theme: Theme.of(context),
+        formKey: _formKey,
+        emailController: emailController,
+        passwordController: passwordController,
+        isPasswordHidden: _isPasswordHidden,
+        onTogglePassword: () => setState(() => _isPasswordHidden = !_isPasswordHidden),
+      );
+}
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.x6,
-              vertical: AppSpacing.x6,
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 480),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.x6),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const LogoWidget(size: 96),
-                        const SizedBox(height: AppSpacing.spaceY6),
-                        Text(
-                          'Welcome back',
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: AppText.bold,
-                            color: AppColors.textPrimary,
+void _disposeControllers(List<TextEditingController> controllers) {
+  for (final c in controllers) {
+    c.dispose();
+  }
+}
+
+Widget buildLoginScreen({
+  required BuildContext context,
+  required ThemeData theme,
+  required GlobalKey<FormState> formKey,
+  required TextEditingController emailController,
+  required TextEditingController passwordController,
+  required bool isPasswordHidden,
+  required VoidCallback onTogglePassword,
+}) {
+  return Scaffold(
+    body: SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.x6,
+            vertical: AppSpacing.x6,
+          ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.x6),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const LogoWidget(size: 96),
+                      const SizedBox(height: AppSpacing.spaceY6),
+                      Text(
+                        'Welcome back',
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontWeight: AppText.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY3),
+                      Text(
+                        'Log in to continue discovering and streaming your favorite tracks.',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY6),
+                      Text(
+                        'Email',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: AppText.medium,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY3 / 3),
+                      AppTextField(
+                        hint: 'your@email.com',
+                        error: 'Enter your email',
+                        controller: emailController,
+                        prefixIcon: Icons.email_outlined,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY4),
+                      Text(
+                        'Password',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: AppText.medium,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY3 / 3),
+                      AppTextField(
+                        controller: passwordController,
+                        hint: 'Enter your password',
+                        error: 'Please enter your password',
+                        prefixIcon: Icons.lock_outline,
+                        obscure: isPasswordHidden,
+                        suffixIcon: isPasswordHidden
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        onSuffixTap: onTogglePassword,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () => onForgotPasswordPressed(context),
+                          style: TextButton.styleFrom(
+                            foregroundColor: theme.colorScheme.primary,
                           ),
-                          textAlign: TextAlign.center,
+                          child: const Text('Forgot password?'),
                         ),
-                        const SizedBox(height: AppSpacing.spaceY3),
-                        Text(
-                          'Log in to continue discovering and streaming your favorite tracks.',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY4),
+                      AppButton(
+                        text: 'Log in',
+                        onPressed: () => onLoginPressed(
+                          context: context,
+                          formKey: formKey,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY6),
+                      Row(
+                        children: const [
+                          Expanded(child: Divider()),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text('OR'),
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY6),
-                        Text(
-                          'Email',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                          Expanded(child: Divider()),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY4),
+                      AppSocialButton(
+                        text: 'Continue with Google',
+                        icon: FontAwesomeIcons.google,
+                        iconSize:25,
+                        onPressed: () {},
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY3),
+                      AppSocialButton(
+                        text: 'Continue with Apple',
+                        icon: Icons.apple,
+                        iconSize: 32,
+                        onPressed: () {},
+                      ),
+                      const SizedBox(height: AppSpacing.spaceY6),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Don't have an account? ",
+                            style: theme.textTheme.bodyMedium,
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY3 / 3),
-                        AppTextField(
-                          hint: 'your@email.com',
-                          error: 'Enter your email',
-                          controller: emailController,
-                          prefixIcon: Icons.email_outlined,
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY4),
-                        Text(
-                          'Password',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY3 / 3),
-                        AppTextField(
-                          controller: passwordController,
-                          hint: 'Enter your password',
-                          error: 'Please enter your password',
-                          prefixIcon: Icons.lock_outline,
-                          obscure: _isPasswordHidden,
-                          suffixIcon: _isPasswordHidden
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          onSuffixTap: () {
-                            setState(() {
-                              _isPasswordHidden = !_isPasswordHidden;
-                            });
-                          },
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ForgotPasswordScreen(),
-                                ),
-                              );
-                            },
+                          TextButton(
+                            onPressed: () => onSignupPressed(context),
                             style: TextButton.styleFrom(
                               foregroundColor: theme.colorScheme.primary,
                             ),
-                            child: const Text('Forgot password?'),
+                            child: const Text('Sign up'),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY4),
-                        AppButton(
-                          text: 'Log in',
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const DashboardScreen(),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY6),
-                        Row(
-                          children: const [
-                            Expanded(child: Divider()),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Text('OR'),
-                            ),
-                            Expanded(child: Divider()),
-                          ],
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY4),
-                        AppSocialButton(
-                          text: 'Continue with Google',
-                          icon: FontAwesomeIcons.google,
-                          iconSize:25,
-                          onPressed: () {},
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY3),
-                        AppSocialButton(
-                          text: 'Continue with Apple',
-                          icon: Icons.apple,
-                          iconSize: 32,
-                          onPressed: () {},
-                        ),
-                        const SizedBox(height: AppSpacing.spaceY6),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account? ",
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SignupScreen(),
-                                  ),
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: theme.colorScheme.primary,
-                              ),
-                              child: const Text('Sign up'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -200,6 +200,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
+    ),
+  );
+}
+
+void onForgotPasswordPressed(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const ForgotPasswordScreen(),
+    ),
+  );
+}
+
+void onLoginPressed({
+  required BuildContext context,
+  required GlobalKey<FormState> formKey,
+}) {
+  if (formKey.currentState?.validate() ?? false) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const DashboardScreen(),
+      ),
     );
   }
+}
+
+void onSignupPressed(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const SignupScreen(),
+    ),
+  );
 }
