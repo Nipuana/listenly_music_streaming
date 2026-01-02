@@ -6,6 +6,7 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/signup_screen.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/features/forgot_password/presentation/forgot_password_screen.dart';
 import 'package:weplay_music_streaming/app/routes/app_routes.dart';
@@ -40,13 +41,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
   }
 
-  void _onForgotPasswordPressed() {
+  void _onForgotPasswordPressed()  async{
     AppRoutes.push(context, const ForgotPasswordScreen());
+    await ref.read(authViewModelProvider.notifier)
+    .login(
+      email: _emailController.text.trim(), 
+      password: _passwordController.text.trim(),
+    );
   }
 
   void _onLoginPressed() {
-    if (_formKey.currentState?.validate() ?? false) {
-      AppRoutes.pushReplacement(context, const DashboardScreen());
+    if (_formKey.currentState!.validate() ) {
+  
     }
   }
 

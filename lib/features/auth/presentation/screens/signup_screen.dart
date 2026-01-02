@@ -274,6 +274,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         AppButton(
                           text: 'Sign up',
                           onPressed: _onSignupPressed,
+                          isLoading: authState.status == AuthStatus.loading,
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
                         Row(
