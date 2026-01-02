@@ -4,8 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
+import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/signup_screen.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/state/auth_state.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/features/forgot_password/presentation/forgot_password_screen.dart';
@@ -41,18 +43,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
   }
 
-  void _onForgotPasswordPressed()  async{
+  void _onForgotPasswordPressed() {
     AppRoutes.push(context, const ForgotPasswordScreen());
-    await ref.read(authViewModelProvider.notifier)
-    .login(
-      email: _emailController.text.trim(), 
-      password: _passwordController.text.trim(),
-    );
   }
 
-  void _onLoginPressed() {
+  void _onLoginPressed() async {
     if (_formKey.currentState!.validate() ) {
-  
+       await ref
+       .read(authViewModelProvider.notifier)
+      .login(
+        email: _emailController.text.trim(), 
+        password: _passwordController.text.trim(),
+    );
+    
     }
   }
 
@@ -62,6 +65,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    ref.listen<AuthState>(authViewModelProvider, (previous, next) {
+      if(next.status == AuthStatus.authenticated){
+        AppRoutes.pushReplacement(
+          context,
+          DashboardScreen()
+        );
+      } else if (next.status == AuthStatus.error && next.errorMessage != null){
+        MysnackUtils.showError(
+          context,
+          "invalid email or password",
+        );
+        
+      }
+    });
     final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
