@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
@@ -19,15 +20,17 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isPasswordHidden = true;
 
   final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
+  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    nameController.dispose();
+    usernameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -73,7 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
                         Text(
-                          'Full name',
+                          'Username',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
                             color: AppColors.textSecondary,
@@ -81,10 +84,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
                         AppTextField(
-                          hint: 'Your name',
-                          error: 'Enter your name',
+                          hint: 'Your username',
+                          error: 'Enter your username',
                           prefixIcon: Icons.person_outline,
-                          controller: nameController,
+                          controller: usernameController,
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
                         Text(
@@ -117,8 +120,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           obscure: _isPasswordHidden,
                           controller: passwordController,
                           suffixIcon: _isPasswordHidden
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           onSuffixTap: () {
                             setState(() {
                               _isPasswordHidden = !_isPasswordHidden;
@@ -133,6 +136,30 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
+                        Text(
+                          'Confirm Password',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          hint: 'Re-enter your password',
+                          error: 'Confirm your password',
+                          prefixIcon: Icons.lock_outline,
+                          obscure: _isPasswordHidden,
+                          controller: confirmPasswordController,
+                          suffixIcon: _isPasswordHidden
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          onSuffixTap: () {
+                            setState(() {
+                              _isPasswordHidden = !_isPasswordHidden;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 1.5),
                         RichText(
                           text: TextSpan(
                             text: 'I agree to the ',
@@ -163,6 +190,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           text: 'Sign up',
                           onPressed: () {
                             if (_formKey.currentState?.validate() ?? false) {
+                              if (passwordController.text != confirmPasswordController.text) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Passwords do not match')),
+                                );
+                                return;
+                              }
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(content: Text('Account created')),
                               );
@@ -183,13 +216,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         const SizedBox(height: AppSpacing.spaceY4),
                         AppSocialButton(
                           text: 'Continue with Google',
-                          icon: Icons.g_mobiledata,
+                          icon: FontAwesomeIcons.google,
+                          iconSize: 25,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY3),
                         AppSocialButton(
                           text: 'Continue with Apple',
-                          icon: Icons.apple,
+                          icon: FontAwesomeIcons.apple,
+                          iconSize: 30,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),

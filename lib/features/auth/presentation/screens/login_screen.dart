@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
@@ -154,13 +155,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: AppSpacing.spaceY4),
                         AppSocialButton(
                           text: 'Continue with Google',
-                          icon: Icons.g_mobiledata,
+                          icon: FontAwesomeIcons.google,
+                          iconSize:25,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY3),
                         AppSocialButton(
                           text: 'Continue with Apple',
                           icon: Icons.apple,
+                          iconSize: 32,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),

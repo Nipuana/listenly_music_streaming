@@ -7,12 +7,14 @@ class AppSocialButton extends StatelessWidget {
   final String text;
   final IconData icon;
   final VoidCallback onPressed;
+  final double iconSize;
 
   const AppSocialButton({
     super.key,
     required this.text,
     required this.icon,
     required this.onPressed,
+    required this.iconSize,
   });
 
   @override
@@ -22,7 +24,7 @@ class AppSocialButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: onPressed,
-        icon: Icon(icon, size: 20, color: AppColors.textPrimary),
+        icon: Icon(icon, size:iconSize, color: AppColors.textPrimary),
         label: Text(
           text,
           style: AppText.bodyMedium.copyWith(color: AppColors.textPrimary),
