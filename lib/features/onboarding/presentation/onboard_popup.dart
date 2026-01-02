@@ -6,6 +6,7 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dar
 
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/screens/signup_screen.dart';
 
 class LoginPopup extends StatelessWidget {
 const LoginPopup({super.key});
@@ -68,7 +69,7 @@ const LoginPopup({super.key});
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const SignupScreen()),
                 );
               },
               style: OutlinedButton.styleFrom(
