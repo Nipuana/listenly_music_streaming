@@ -19,6 +19,7 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
+
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -107,9 +108,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
-                        _buildEmailField(theme),
+                        // Email
+                        Text(
+                          'Email',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          hint: 'your@email.com',
+                          error: 'Enter your email',
+                          controller: _emailController,
+                          prefixIcon: Icons.email_outlined,
+                        ),
                         const SizedBox(height: AppSpacing.spaceY4),
-                        _buildPasswordField(theme),
+                        // Password
+                        Text(
+                          'Password',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          controller: _passwordController,
+                          hint: 'Enter your password',
+                          error: 'Please enter your password',
+                          prefixIcon: Icons.lock_outline,
+                          obscure: _isPasswordHidden,
+                          suffixIcon: _isPasswordHidden
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          onSuffixTap: _togglePasswordVisibility,
+                        ),
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
@@ -176,55 +210,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildEmailField(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Email',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: AppText.medium,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.spaceY3 / 3),
-        AppTextField(
-          hint: 'your@email.com',
-          error: 'Enter your email',
-          controller: _emailController,
-          prefixIcon: Icons.email_outlined,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPasswordField(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Password',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: AppText.medium,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.spaceY3 / 3),
-        AppTextField(
-          controller: _passwordController,
-          hint: 'Enter your password',
-          error: 'Please enter your password',
-          prefixIcon: Icons.lock_outline,
-          obscure: _isPasswordHidden,
-          suffixIcon: _isPasswordHidden
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
-          onSuffixTap: _togglePasswordVisibility,
-        ),
-      ],
     );
   }
 }

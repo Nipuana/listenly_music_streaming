@@ -19,6 +19,7 @@ class SignupScreen extends ConsumerStatefulWidget {
   ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
+
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
@@ -136,11 +137,58 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
-                        _buildUsernameField(theme),
+                        // Username
+                        Text(
+                          'Username',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          hint: 'Your username',
+                          error: 'Enter your username',
+                          prefixIcon: Icons.person_outline,
+                          controller: _usernameController,
+                        ),
                         const SizedBox(height: AppSpacing.spaceY4),
-                        _buildEmailField(theme),
+                        // Email
+                        Text(
+                          'Email',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          hint: 'your@email.com',
+                          error: 'Enter your email',
+                          prefixIcon: Icons.email_outlined,
+                          controller: _emailController,
+                        ),
                         const SizedBox(height: AppSpacing.spaceY4),
-                        _buildPasswordField(theme),
+                        // Password
+                        Text(
+                          'Password',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          hint: 'Create a strong password',
+                          error: 'Enter your password',
+                          prefixIcon: Icons.lock_outline,
+                          obscure: _isPasswordHidden,
+                          controller: _passwordController,
+                          suffixIcon: _isPasswordHidden
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          onSuffixTap: _togglePasswordVisibility,
+                        ),
                         const SizedBox(height: AppSpacing.spaceY3 / 1.5),
                         Text(
                           'Must be at least 8 characters long',
@@ -149,9 +197,70 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
-                        _buildConfirmPasswordField(theme),
+                        // Confirm Password
+                        Text(
+                          'Confirm Password',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: AppText.medium,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3 / 3),
+                        AppTextField(
+                          hint: 'Re-enter your password',
+                          error: 'Confirm your password',
+                          prefixIcon: Icons.lock_outline,
+                          obscure: _isConfirmPasswordHidden,
+                          controller: _confirmPasswordController,
+                          suffixIcon: _isConfirmPasswordHidden
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          onSuffixTap: _toggleConfirmPasswordVisibility,
+                        ),
                         const SizedBox(height: AppSpacing.spaceY3 / 1.5),
-                        _buildTermsRow(theme),
+                        // Terms & Conditions
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: _agreedToTerms,
+                              onChanged: _onTermsChanged,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: GestureDetector(
+                                  onTap: _toggleTerms,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'I agree to the ',
+                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                        color: AppColors.textPrimary,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Terms & Conditions',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary,
+                                            fontWeight: AppText.medium,
+                                          ),
+                                        ),
+                                        const TextSpan(text: ' and '),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary,
+                                            fontWeight: AppText.medium,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: AppSpacing.spaceY6),
                         AppButton(
                           text: 'Sign up',
@@ -208,149 +317,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildUsernameField(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Username',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: AppText.medium,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.spaceY3 / 3),
-        AppTextField(
-          hint: 'Your username',
-          error: 'Enter your username',
-          prefixIcon: Icons.person_outline,
-          controller: _usernameController,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmailField(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Email',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: AppText.medium,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.spaceY3 / 3),
-        AppTextField(
-          hint: 'your@email.com',
-          error: 'Enter your email',
-          prefixIcon: Icons.email_outlined,
-          controller: _emailController,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPasswordField(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Password',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: AppText.medium,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.spaceY3 / 3),
-        AppTextField(
-          hint: 'Create a strong password',
-          error: 'Enter your password',
-          prefixIcon: Icons.lock_outline,
-          obscure: _isPasswordHidden,
-          controller: _passwordController,
-          suffixIcon: _isPasswordHidden
-              ? Icons.visibility_off_outlined
-              : Icons.visibility_outlined,
-          onSuffixTap: _togglePasswordVisibility,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildConfirmPasswordField(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Confirm Password',
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: AppText.medium,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.spaceY3 / 3),
-        AppTextField(
-          hint: 'Re-enter your password',
-          error: 'Confirm your password',
-          prefixIcon: Icons.lock_outline,
-          obscure: _isConfirmPasswordHidden,
-          controller: _confirmPasswordController,
-          suffixIcon: _isConfirmPasswordHidden
-              ? Icons.visibility_off_outlined
-              : Icons.visibility_outlined,
-          onSuffixTap: _toggleConfirmPasswordVisibility,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTermsRow(ThemeData theme) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Checkbox(
-          value: _agreedToTerms,
-          onChanged: _onTermsChanged,
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: GestureDetector(
-              onTap: _toggleTerms,
-              child: RichText(
-                text: TextSpan(
-                  text: 'I agree to the ',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textPrimary,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'Terms & Conditions',
-                      style: TextStyle(
-                        color: theme.colorScheme.primary,
-                        fontWeight: AppText.medium,
-                      ),
-                    ),
-                    const TextSpan(text: ' and '),
-                    TextSpan(
-                      text: 'Privacy Policy',
-                      style: TextStyle(
-                        color: theme.colorScheme.primary,
-                        fontWeight: AppText.medium,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
