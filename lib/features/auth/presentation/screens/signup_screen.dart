@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
@@ -7,37 +8,107 @@ import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.da
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_social_button.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/widgets/logo_widget.dart';
+import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/state/auth_state.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
 
-class SignupScreen extends StatefulWidget {
+
+class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  bool _isPasswordHidden = true;
 
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  bool _isPasswordHidden = true;
+  bool _isConfirmPasswordHidden = true;
+  bool _agreedToTerms = false;
 
   @override
   void dispose() {
-    usernameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordHidden = !_isPasswordHidden;
+    });
+  }
+
+  void _toggleConfirmPasswordVisibility() {
+    setState(() {
+      _isConfirmPasswordHidden = !_isConfirmPasswordHidden;
+    });
+  }
+
+  void _toggleTerms() {
+    setState(() {
+      _agreedToTerms = !_agreedToTerms;
+    });
+  }
+
+  void _onTermsChanged(bool? value) {
+    setState(() {
+      _agreedToTerms = value ?? false;
+    });
+  }
+
+  void _onLoginPressed() {
+    AppRoutes.push(context, const LoginScreen());
+  }
+
+  Future<void> _onSignupPressed() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      MysnackUtils.showError(context, 'Passwords do not match');
+      return;
+    }
+    if (!_agreedToTerms) {
+      MysnackUtils.showWarning(context, 'You must agree to the Terms & Conditions and Privacy Policy');
+      return;
+    }
+    if (_formKey.currentState!.validate()) {
+      ref.read(authViewModelProvider.notifier).register(
+        username: _usernameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final authState = ref.watch(authViewModelProvider);
 
+    //listen for state changes
+    ref.listen(authViewModelProvider, (previous, next) {
+      if (next.status == AuthStatus.error) {
+        MysnackUtils.showError(
+          context,
+          next.errorMessage ?? 'Registration failed');
+      }
+      else if (next.status == AuthStatus.registered) {
+        AppRoutes.pushReplacement(context, const LoginScreen());
+        MysnackUtils.showSuccess(context, 'Registration successful! Please log in.');
+      }
+    });
+    
+
+
+    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -75,6 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
+                        // Username
                         Text(
                           'Username',
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -87,9 +159,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           hint: 'Your username',
                           error: 'Enter your username',
                           prefixIcon: Icons.person_outline,
-                          controller: usernameController,
+                          controller: _usernameController,
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
+                        // Email
                         Text(
                           'Email',
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -102,9 +175,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           hint: 'your@email.com',
                           error: 'Enter your email',
                           prefixIcon: Icons.email_outlined,
-                          controller: emailController,
+                          controller: _emailController,
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
+                        // Password
                         Text(
                           'Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -118,15 +192,11 @@ class _SignupScreenState extends State<SignupScreen> {
                           error: 'Enter your password',
                           prefixIcon: Icons.lock_outline,
                           obscure: _isPasswordHidden,
-                          controller: passwordController,
+                          controller: _passwordController,
                           suffixIcon: _isPasswordHidden
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
-                          onSuffixTap: () {
-                            setState(() {
-                              _isPasswordHidden = !_isPasswordHidden;
-                            });
-                          },
+                          onSuffixTap: _togglePasswordVisibility,
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 1.5),
                         Text(
@@ -136,6 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
+                        // Confirm Password
                         Text(
                           'Confirm Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -148,59 +219,62 @@ class _SignupScreenState extends State<SignupScreen> {
                           hint: 'Re-enter your password',
                           error: 'Confirm your password',
                           prefixIcon: Icons.lock_outline,
-                          obscure: _isPasswordHidden,
-                          controller: confirmPasswordController,
-                          suffixIcon: _isPasswordHidden
+                          obscure: _isConfirmPasswordHidden,
+                          controller: _confirmPasswordController,
+                          suffixIcon: _isConfirmPasswordHidden
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
-                          onSuffixTap: () {
-                            setState(() {
-                              _isPasswordHidden = !_isPasswordHidden;
-                            });
-                          },
+                          onSuffixTap: _toggleConfirmPasswordVisibility,
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 1.5),
-                        RichText(
-                          text: TextSpan(
-                            text: 'I agree to the ',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppColors.textPrimary,
+                        // Terms & Conditions
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Checkbox(
+                              value: _agreedToTerms,
+                              onChanged: _onTermsChanged,
                             ),
-                            children: [
-                              TextSpan(
-                                text: 'Terms & Conditions',
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: AppText.medium,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: GestureDetector(
+                                  onTap: _toggleTerms,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'I agree to the ',
+                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                        color: AppColors.textPrimary,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Terms & Conditions',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary,
+                                            fontWeight: AppText.medium,
+                                          ),
+                                        ),
+                                        const TextSpan(text: ' and '),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: TextStyle(
+                                            color: theme.colorScheme.primary,
+                                            fontWeight: AppText.medium,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const TextSpan(text: ' and '),
-                              TextSpan(
-                                text: 'Privacy Policy',
-                                style: TextStyle(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: AppText.medium,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
                         AppButton(
                           text: 'Sign up',
-                          onPressed: () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              if (passwordController.text != confirmPasswordController.text) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Passwords do not match')),
-                                );
-                                return;
-                              }
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Account created')),
-                              );
-                            }
-                          },
+                          onPressed: _onSignupPressed,
+                          isLoading: authState.status == AuthStatus.loading,
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
                         Row(
@@ -236,14 +310,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               style: theme.textTheme.bodyMedium,
                             ),
                             TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                );
-                              },
+                              onPressed: _onLoginPressed,
                               style: TextButton.styleFrom(
                                 foregroundColor: theme.colorScheme.primary,
                               ),
