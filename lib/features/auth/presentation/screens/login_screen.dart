@@ -20,179 +20,155 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  bool _isPasswordHidden = true;
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isPasswordHidden = true;
 
   @override
   void dispose() {
-    _disposeControllers([
-      emailController,
-      passwordController,
-    ]);
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) => buildLoginScreen(
-        context: context,
-        theme: Theme.of(context),
-        formKey: _formKey,
-        emailController: emailController,
-        passwordController: passwordController,
-        isPasswordHidden: _isPasswordHidden,
-        onTogglePassword: () => setState(() => _isPasswordHidden = !_isPasswordHidden),
-      );
-}
-
-void _disposeControllers(List<TextEditingController> controllers) {
-  for (final c in controllers) {
-    c.dispose();
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordHidden = !_isPasswordHidden;
+    });
   }
-}
 
-Widget buildLoginScreen({
-  required BuildContext context,
-  required ThemeData theme,
-  required GlobalKey<FormState> formKey,
-  required TextEditingController emailController,
-  required TextEditingController passwordController,
-  required bool isPasswordHidden,
-  required VoidCallback onTogglePassword,
-}) {
-  return Scaffold(
-    body: SafeArea(
-      child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.x6,
-            vertical: AppSpacing.x6,
-          ),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.x6),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const LogoWidget(size: 96),
-                      const SizedBox(height: AppSpacing.spaceY6),
-                      Text(
-                        'Welcome back',
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: AppText.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY3),
-                      Text(
-                        'Log in to continue discovering and streaming your favorite tracks.',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY6),
-                      Text(
-                        'Email',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: AppText.medium,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY3 / 3),
-                      AppTextField(
-                        hint: 'your@email.com',
-                        error: 'Enter your email',
-                        controller: emailController,
-                        prefixIcon: Icons.email_outlined,
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY4),
-                      Text(
-                        'Password',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: AppText.medium,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY3 / 3),
-                      AppTextField(
-                        controller: passwordController,
-                        hint: 'Enter your password',
-                        error: 'Please enter your password',
-                        prefixIcon: Icons.lock_outline,
-                        obscure: isPasswordHidden,
-                        suffixIcon: isPasswordHidden
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        onSuffixTap: onTogglePassword,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () => onForgotPasswordPressed(context),
-                          style: TextButton.styleFrom(
-                            foregroundColor: theme.colorScheme.primary,
+  void _onForgotPasswordPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ForgotPasswordScreen(),
+      ),
+    );
+  }
+
+  void _onLoginPressed() {
+    if (_formKey.currentState?.validate() ?? false) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const DashboardScreen(),
+        ),
+      );
+    }
+  }
+
+  void _onSignupPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignupScreen(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.x6,
+              vertical: AppSpacing.x6,
+            ),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 480),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.x6),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const LogoWidget(size: 96),
+                        const SizedBox(height: AppSpacing.spaceY6),
+                        Text(
+                          'Welcome back',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: AppText.bold,
+                            color: AppColors.textPrimary,
                           ),
-                          child: const Text('Forgot password?'),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY4),
-                      AppButton(
-                        text: 'Log in',
-                        onPressed: () => onLoginPressed(
-                          context: context,
-                          formKey: formKey,
+                        const SizedBox(height: AppSpacing.spaceY3),
+                        Text(
+                          'Log in to continue discovering and streaming your favorite tracks.',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY6),
-                      Row(
-                        children: const [
-                          Expanded(child: Divider()),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text('OR'),
-                          ),
-                          Expanded(child: Divider()),
-                        ],
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY4),
-                      AppSocialButton(
-                        text: 'Continue with Google',
-                        icon: FontAwesomeIcons.google,
-                        iconSize:25,
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY3),
-                      AppSocialButton(
-                        text: 'Continue with Apple',
-                        icon: Icons.apple,
-                        iconSize: 32,
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: AppSpacing.spaceY6),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account? ",
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          TextButton(
-                            onPressed: () => onSignupPressed(context),
+                        const SizedBox(height: AppSpacing.spaceY6),
+                        _buildEmailField(theme),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        _buildPasswordField(theme),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: _onForgotPasswordPressed,
                             style: TextButton.styleFrom(
                               foregroundColor: theme.colorScheme.primary,
                             ),
-                            child: const Text('Sign up'),
+                            child: const Text('Forgot password?'),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        AppButton(
+                          text: 'Log in',
+                          onPressed: _onLoginPressed,
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY6),
+                        Row(
+                          children: const [
+                            Expanded(child: Divider()),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: Text('OR'),
+                            ),
+                            Expanded(child: Divider()),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        AppSocialButton(
+                          text: 'Continue with Google',
+                          icon: FontAwesomeIcons.google,
+                          iconSize: 25,
+                          onPressed: () {},
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY3),
+                        AppSocialButton(
+                          text: 'Continue with Apple',
+                          icon: Icons.apple,
+                          iconSize: 32,
+                          onPressed: () {},
+                        ),
+                        const SizedBox(height: AppSpacing.spaceY6),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                            TextButton(
+                              onPressed: _onSignupPressed,
+                              style: TextButton.styleFrom(
+                                foregroundColor: theme.colorScheme.primary,
+                              ),
+                              child: const Text('Sign up'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -200,38 +176,55 @@ Widget buildLoginScreen({
           ),
         ),
       ),
-    ),
-  );
-}
-
-void onForgotPasswordPressed(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const ForgotPasswordScreen(),
-    ),
-  );
-}
-
-void onLoginPressed({
-  required BuildContext context,
-  required GlobalKey<FormState> formKey,
-}) {
-  if (formKey.currentState?.validate() ?? false) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const DashboardScreen(),
-      ),
     );
   }
-}
 
-void onSignupPressed(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const SignupScreen(),
-    ),
-  );
+  Widget _buildEmailField(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Email',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: AppText.medium,
+            color: AppColors.textSecondary,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.spaceY3 / 3),
+        AppTextField(
+          hint: 'your@email.com',
+          error: 'Enter your email',
+          controller: _emailController,
+          prefixIcon: Icons.email_outlined,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Password',
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: AppText.medium,
+            color: AppColors.textSecondary,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.spaceY3 / 3),
+        AppTextField(
+          controller: _passwordController,
+          hint: 'Enter your password',
+          error: 'Please enter your password',
+          prefixIcon: Icons.lock_outline,
+          obscure: _isPasswordHidden,
+          suffixIcon: _isPasswordHidden
+              ? Icons.visibility_outlined
+              : Icons.visibility_off_outlined,
+          onSuffixTap: _togglePasswordVisibility,
+        ),
+      ],
+    );
+  }
 }
