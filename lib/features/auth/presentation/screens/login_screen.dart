@@ -72,7 +72,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if(next.status == AuthStatus.authenticated){
-        AppRoutes.pushReplacement(
+        AppRoutes.pushAndRemoveUntil(
           context,
           DashboardScreen()
         );
