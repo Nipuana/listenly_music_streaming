@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/screens/navigation_screens/home_screen.dart';
-import 'package:weplay_music_streaming/screens/navigation_screens/library_screen.dart';
-import 'package:weplay_music_streaming/screens/navigation_screens/likes_screen.dart';
-import 'package:weplay_music_streaming/screens/navigation_screens/profile_screen.dart';
-import 'package:weplay_music_streaming/screens/navigation_screens/search_screen.dart';
-import 'package:weplay_music_streaming/widget/nav-icon.dart';
-import 'package:weplay_music_streaming/constant/app_colors.dart';
+import 'package:weplay_music_streaming/core/widgets/nav_icon.dart';
+import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/home_screen.dart';
+import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/library_screen.dart';
+import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/likes_screen.dart';
+import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/profile_screen.dart';
+import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/search_screen.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 
 class MyBottomNavigation extends StatefulWidget {
   const MyBottomNavigation({super.key});
