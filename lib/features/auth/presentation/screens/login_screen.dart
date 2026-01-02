@@ -65,6 +65,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+     final theme = Theme.of(context);
+
+    final authState=ref.watch(authViewModelProvider);
+
 
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if(next.status == AuthStatus.authenticated){
@@ -80,7 +84,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         
       }
     });
-    final theme = Theme.of(context);
+   
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -168,6 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         AppButton(
                           text: 'Log in',
                           onPressed: _onLoginPressed,
+                          isLoading: authState.status == AuthStatus.loading,
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
                         Row(
