@@ -10,7 +10,7 @@ import 'package:weplay_music_streaming/features/auth/presentation/screens/signup
 import 'package:weplay_music_streaming/features/auth/presentation/state/auth_state.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:weplay_music_streaming/features/forgot_password/presentation/forgot_password_screen.dart';
+import 'package:weplay_music_streaming/features/forgot_password/presentation/screens/forgot_password_screen.dart';
 import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_social_button.dart';

@@ -45,7 +45,7 @@ class AppTextField extends StatelessWidget {
               )
             : null,
         filled: true,
-        fillColor: AppColors.inputBackground,
+        fillColor: AppColors.inputFill,
         border: OutlineInputBorder(
           borderRadius: AppRadius.xl,
           borderSide: BorderSide.none,
