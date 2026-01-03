@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 
 class FlutterSplashScreen extends StatefulWidget {
   final VoidCallback? onComplete;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:weplay_music_streaming/app/theme/app_theme.dart';
 import 'package:weplay_music_streaming/features/splash/presentation/screens/flutter_splash_screen.dart';
 
