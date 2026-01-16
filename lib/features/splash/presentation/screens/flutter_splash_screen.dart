@@ -1,161 +1,187 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
+import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
+import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/features/onboarding/presentation/screens/onboarding_screen.dart';
 
-class FlutterSplashScreen extends StatefulWidget {
+class FlutterSplashScreen extends ConsumerStatefulWidget {
   final VoidCallback? onComplete;
   const FlutterSplashScreen({super.key, this.onComplete});
 
   @override
-  State<FlutterSplashScreen> createState() => _FlutterSplashScreenState();
+  ConsumerState<FlutterSplashScreen> createState() => _FlutterSplashScreenState();
 }
 
-class _FlutterSplashScreenState extends State<FlutterSplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _bounceAnim;
+class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late AnimationController _scaleController;
+
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _logoFadeAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _setupAnimations();
+    _startAnimations();
+    _navigateToNext();
+  }
+
+  void _setupAnimations() {
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    )..repeat(reverse: true);
-    _bounceAnim = Tween<double>(begin: 0, end: -20).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut)
     );
-    Future.delayed(const Duration(seconds: 2), () {
-      if (widget.onComplete != null) {
-        widget.onComplete!();
-      } else {
-        // Default: navigate to onboarding using AppRoutes with fade
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => OnboardingScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              transitionDuration: const Duration(milliseconds: 600),
-            ),
-          );
-        }
-      }
-    });
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    _scaleController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
+    _logoFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _scaleController,
+        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+      ),
+    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.easeOutCubic),
+    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
+  }
+
+  void _startAnimations() async {
+    _scaleController.forward();
+    await Future.delayed(const Duration(milliseconds: 300));
+    _fadeController.forward();
+    _slideController.forward();
+  }
+
+  void _navigateToNext() async {
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+
+    final userSessionService = ref.read(userSessionServiceProvider);
+    final isLoggedIn =  userSessionService.isLoggedIn();
+    
+    if (isLoggedIn) {
+      AppRoutes.pushReplacement(context, DashboardScreen());
+    } else {
+      AppRoutes.pushReplacement(context, OnboardingScreen());
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _fadeController.dispose();
+    _slideController.dispose();
+    _scaleController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final logoSize = screenWidth < 360 ? 100.0 : 120.0;
+    final titleFontSize = screenWidth < 360 ? 26.0 : 32.0;
+    final verticalSpacing = screenHeight < 700 ? 30.0 : 40.0;
     return Scaffold(
-      backgroundColor: theme.colorScheme.primary,
-      body: Stack(
-        children: [
-          // Animated circles background
-          Positioned.fill(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: MediaQuery.of(context).size.height * 0.25,
-                  left: MediaQuery.of(context).size.width * 0.25,
-                  child: AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) => Opacity(
-                      opacity: 0.2,
+      backgroundColor: AppColors.primary,
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: SafeArea(
+          child: Column(
+            children: [
+              const Spacer(flex: 3),
+              // Logo Section (use logo asset as before)
+              AnimatedBuilder(
+                animation: _scaleController,
+                builder: (context, child) {
+                  return FadeTransition(
+                    opacity: _logoFadeAnimation,
+                    child: Transform.scale(
+                      scale: _scaleAnimation.value,
                       child: Container(
-                        width: 180,
-                        height: 180,
+                        width: logoSize,
+                        height: logoSize,
                         decoration: BoxDecoration(
-                          color: AppColors.white30,
                           shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.6),
+                              blurRadius: 70,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            fit: BoxFit.contain,
+                            color: AppColors.white80,
+                            colorBlendMode: BlendMode.modulate,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  bottom: MediaQuery.of(context).size.height * 0.25,
-                  right: MediaQuery.of(context).size.width * 0.25,
-                  child: AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) => Opacity(
-                      opacity: 0.2,
-                      child: Container(
-                        width: 140,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          color: AppColors.white30,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Content
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Logo with bounce animation
-                AnimatedBuilder(
-                  animation: _bounceAnim,
-                  builder: (context, child) => Transform.translate(
-                    offset: Offset(0, _bounceAnim.value),
-                    child: child,
-                  ),
-                  child: Container(
-                    width: 128,
-                    height: 128,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.6),
-                          blurRadius: 70,
-                          offset: const Offset(0, 8),
+                  );
+                },
+              ),
+              SizedBox(height: verticalSpacing),
+              // Tagline (as before)
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            'Your music, your way',
+                            style: TextStyle(
+                              fontSize: titleFontSize,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.white90,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      fit: BoxFit.contain,
-                      color: Colors.white.withOpacity(0.8),
-                      colorBlendMode: BlendMode.modulate,
-                    ),
                   ),
                 ),
-                const SizedBox(height: 32),
-                // Tagline
-                Text(
-                  'Your music, your way',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: AppColors.white90,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                // Loading indicator
-                Row(
+              ),
+              const Spacer(flex: 3),
+              // Loading indicator (animated dots as before)
+              FadeTransition(
+                opacity: _fadeAnimation,
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(3, (i) {
                     return AnimatedBuilder(
-                      animation: _controller,
+                      animation: _scaleController,
                       builder: (context, child) {
                         double delay = i * 0.2;
-                        double value = (_controller.value - delay) % 1.0;
+                        double value = (_scaleController.value - delay) % 1.0;
                         double dy = -8 * (1 - (value * 2 - 1).abs());
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -171,55 +197,12 @@ class _FlutterSplashScreenState extends State<FlutterSplashScreen> with SingleTi
                     );
                   }),
                 ),
-              ],
-            ),
-          ),
-          // Bottom decorative element
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Opacity(
-              opacity: 0.10,
-              child: SizedBox(
-                height: 80,
-                child: CustomPaint(
-                  painter: _BottomWavePainter(),
-                  size: const Size(double.infinity, 80),
-                ),
               ),
-            ),
+              const Spacer(flex: 1),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
-}
-
-class _BottomWavePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-    final path = Path()
-      ..moveTo(0, size.height * 0.3)
-      ..cubicTo(
-        size.width * 0.2, size.height * 0.5,
-        size.width * 0.4, size.height * 0.1,
-        size.width * 0.6, size.height * 0.3,
-      )
-      ..cubicTo(
-        size.width * 0.8, size.height * 0.5,
-        size.width * 0.9, size.height * 0.2,
-        size.width, size.height * 0.3,
-      )
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
