@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weplay_music_streaming/core/api/api_client.dart';
+import 'package:weplay_music_streaming/core/api/api_endpoints.dart';
 import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/auth_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_api_model.dart';
-import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
 
 // make a provider
-final authRemoteDatasourceProvider = Provider<IAuthRemoteDatasource>((ref) {
+final authRemoteDataSourceProvider = Provider<IAuthRemoteDatasource>((ref) {
 
   return AuthRemoteDatasource(
        apiClient : ref.watch(apiClientProvider),
@@ -27,6 +27,26 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
     }): _apiClient = apiClient,
         _userSessionService = userSessionService;
 
+  
+  @override
+  Future<AuthApiModel?> login(String email, String password) async {
+    // TODO: implement login
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AuthApiModel> register(AuthApiModel model) async{
+    final response = await _apiClient.post(
+      ApiEndpoints.registerUser,
+      data: model.toJson(),
+    );
+    if (response.data['success']==true){
+      final data = response.data['data'] as Map<String, dynamic>;
+      final registeredUser = AuthApiModel.fromJson(data);
+      return registeredUser;
+    } 
+    return model;
+  }
 
   @override
   Future<AuthApiModel?> getCurrentUser() {
@@ -34,11 +54,6 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
     throw UnimplementedError();
   }
 
-  @override
-  Future<AuthApiModel?> login(String email, String password) {
-    // TODO: implement login
-    throw UnimplementedError();
-  }
 
   @override
   Future<bool> logout() {
@@ -46,9 +61,6 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
     throw UnimplementedError();
   }
 
-  @override
-  Future<bool> register(AuthApiModel model) {
-    // TODO: implement register
-    throw UnimplementedError();
-  }
+
+
 }
