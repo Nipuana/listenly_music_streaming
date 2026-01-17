@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weplay_music_streaming/core/api/api_client.dart';
 import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/auth_datasource.dart';
+import 'package:weplay_music_streaming/features/auth/data/models/auth_api_model.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
 
 // make a provider
@@ -28,13 +29,13 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
 
 
   @override
-  Future<AuthHiveModel?> getCurrentUser() {
+  Future<AuthApiModel?> getCurrentUser() {
     // TODO: implement getCurrentUser
     throw UnimplementedError();
   }
 
   @override
-  Future<AuthHiveModel?> login(String email, String password) {
+  Future<AuthApiModel?> login(String email, String password) {
     // TODO: implement login
     throw UnimplementedError();
   }
@@ -46,7 +47,7 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
   }
 
   @override
-  Future<bool> register(AuthHiveModel model) {
+  Future<bool> register(AuthApiModel model) {
     // TODO: implement register
     throw UnimplementedError();
   }
