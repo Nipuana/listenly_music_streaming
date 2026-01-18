@@ -36,7 +36,7 @@ class AuthApiModel {
 			id: json['_id'] as String?,
 			username: json['username'] as String,
 			email: json['email'] as String,
-			userType: json['userType'] as String,
+			userType: json['role'] as String,
 			password: json['password'] as String?,
 			confirmPassword: json['confirmPassword'] as String?,
 			profilePicture: json['profilePicture'] as String?,
