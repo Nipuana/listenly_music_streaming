@@ -110,19 +110,24 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
 
     final theme = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 400;
+    final horizontalPadding = isSmallScreen ? 12.0 : AppSpacing.x6;
+    final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
+    final cardPadding = isSmallScreen ? 12.0 : AppSpacing.x6;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.x6,
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
               vertical: AppSpacing.x6,
             ),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 480),
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.x6),
+                  padding: EdgeInsets.all(cardPadding),
                   child: Form(
                     key: _formKey,
                     child: Column(
