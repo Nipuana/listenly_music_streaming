@@ -31,12 +31,14 @@ class NavIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: SizedBox(
-          width: 78, 
+          width: double.infinity, 
           height: double.infinity,
-          child: Icon(
-            icon,
-            color: isActive ? activeColor : inactiveColor,
-            size: iconSize,
+          child: Center(
+            child: Icon(
+              icon,
+              color: isActive ? activeColor : inactiveColor,
+              size: iconSize,
+            ),
           ),
         ),
       ),
