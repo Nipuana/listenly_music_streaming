@@ -156,6 +156,19 @@ class AppTheme {
         ),
         actionTextColor: AppColors.primary,
       ),
+
+      // ───────── Bottom Navigation ─────────
+      bottomAppBarTheme: BottomAppBarThemeData(
+        color: AppColors.surface,
+        elevation: 12,
+        shadowColor: Colors.black26,
+      ),
+
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 6,
+      ),
     );
   }
 
@@ -280,6 +293,19 @@ class AppTheme {
           color: AppColors.darkTextPrimary,
         ),
         actionTextColor: AppColors.primary,
+      ),
+
+      // ───────── Bottom Navigation ─────────
+      bottomAppBarTheme: BottomAppBarThemeData(
+        color: AppColors.darkSurface,
+        elevation: 12,
+        shadowColor: Colors.black54,
+      ),
+
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        elevation: 6,
       ),
     );
   }
