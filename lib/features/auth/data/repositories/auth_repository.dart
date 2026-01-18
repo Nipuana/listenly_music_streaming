@@ -13,11 +13,11 @@ import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_re
 
 //Provider
 final authRepositoryProvider =  Provider<IAuthRepository>((ref){
-  final authDatasource= ref.read(authLocalDatasourceProvider);
+  final authLocalDatasource= ref.read(authLocalDatasourceProvider);
   final authRemoteDatasource= ref.read(authRemoteDataSourceProvider);
   final networkInfo= ref.read(networkInfoProvider);
   return AuthRepository(
-    authDatasource: authDatasource,
+    authLocalDatasource: authLocalDatasource,
     authRemoteDatasource: authRemoteDatasource,
     networkInfo: networkInfo,
   );
@@ -25,22 +25,22 @@ final authRepositoryProvider =  Provider<IAuthRepository>((ref){
 
 class AuthRepository implements IAuthRepository {
   
-  final IAuthLocalDatasource _authDatasource;
+  final IAuthLocalDatasource _authLocalDatasource;
   final IAuthRemoteDatasource _authRemoteDatasource;
   final INetworkInfo _networkInfo;
 
   AuthRepository({
-    required IAuthLocalDatasource authDatasource,
+    required IAuthLocalDatasource authLocalDatasource,
     required IAuthRemoteDatasource authRemoteDatasource,
     required INetworkInfo networkInfo,
-  })  : _authDatasource = authDatasource,
+  })  : _authLocalDatasource = authLocalDatasource,
         _authRemoteDatasource = authRemoteDatasource,
         _networkInfo = networkInfo;
 
   @override
   Future<Either<Failure, AuthEntity>> getCurrentUser() async {
    try{
-      final user =  await _authDatasource.getCurrentUser();
+      final user =  await _authLocalDatasource.getCurrentUser();
       if(user !=null){
         final entity = user.toEntity();
         return Right( entity);
@@ -55,7 +55,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, AuthEntity>> login(String email, String password) async {
     try{
-      final user = await _authDatasource.login(email, password);
+      final user = await _authLocalDatasource.login(email, password);
       if(user !=null){
         final entity = user.toEntity();
         return Right(entity);
@@ -70,7 +70,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, bool>> logout() async{
     try{
-      final result = await _authDatasource.logout();
+      final result = await _authLocalDatasource.logout();
       if(result){
         return Right( true);
       }
@@ -100,7 +100,7 @@ class AuthRepository implements IAuthRepository {
     // else{
     //   try{
     //   final model = AuthHiveModel.fromEntity(entity);
-    //   final result = await _authDatasource.register(model);
+    //   final result = await _authLocalDatasource.register(model);
     //   if (result){
     //     return Right(true);
     //   } else {
