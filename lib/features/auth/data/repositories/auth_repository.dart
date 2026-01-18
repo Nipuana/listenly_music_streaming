@@ -1,23 +1,42 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weplay_music_streaming/core/error/faliures.dart';
+import 'package:weplay_music_streaming/core/services/connectivity/network_info.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/auth_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/local/auth_local_datasource.dart';
+import 'package:weplay_music_streaming/features/auth/data/datasources/remote/auth_remote_datasource.dart';
+import 'package:weplay_music_streaming/features/auth/data/models/auth_api_model.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_repository.dart';
 
 //Provider
 final authRepositoryProvider =  Provider<IAuthRepository>((ref){
-  return AuthRepository(authDatasource: ref.read(authLocalDatasourceProvider));
+  final authDatasource= ref.read(authLocalDatasourceProvider);
+  final authRemoteDatasource= ref.read(authRemoteDataSourceProvider);
+  final networkInfo= ref.read(networkInfoProvider);
+  return AuthRepository(
+    authDatasource: authDatasource,
+    authRemoteDatasource: authRemoteDatasource,
+    networkInfo: networkInfo,
+  );
 });
 
 class AuthRepository implements IAuthRepository {
   
   final IAuthLocalDatasource _authDatasource;
+  final IAuthRemoteDatasource _authRemoteDatasource;
+  final INetworkInfo _networkInfo;
 
-  AuthRepository({required IAuthLocalDatasource authDatasource})
-   : _authDatasource = authDatasource;
+  AuthRepository({
+    required IAuthLocalDatasource authDatasource,
+    required IAuthRemoteDatasource authRemoteDatasource,
+    required INetworkInfo networkInfo,
+  })  : _authDatasource = authDatasource,
+        _authRemoteDatasource = authRemoteDatasource,
+        _networkInfo = networkInfo;
+
   @override
   Future<Either<Failure, AuthEntity>> getCurrentUser() async {
    try{
@@ -64,7 +83,18 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<Either<Failure, bool>> register(AuthEntity entity) async{
-    try{
+    if (await _networkInfo.isConnected) {
+     try{
+       final apiModel=AuthApiModel.fromEntity(entity);
+      await _authRemoteDatasource.register(apiModel);
+      return Right(true);
+     }on DioException catch(e){
+      return Left(ApiFailure (message:e.response?.data['message'] ?? "Registration failed", statusCode: e.response?.statusCode));
+     } catch (e) {
+      return Left(ApiFailure (message: e.toString()));
+     }
+    }else{
+      try{
       final model = AuthHiveModel.fromEntity(entity);
       final result = await _authDatasource.register(model);
       if (result){
@@ -72,9 +102,9 @@ class AuthRepository implements IAuthRepository {
       } else {
         return Left(LocalDatabaseFailure (message: "Registration failed"));
       }
-
-    } catch (e) {
+      } catch (e) {
       return Left(LocalDatabaseFailure (message: e.toString()));
+      }
+      }
     }
-  }
 }
