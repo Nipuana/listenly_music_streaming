@@ -93,18 +93,8 @@ class AuthRepository implements IAuthRepository {
      } catch (e) {
       return Left(ApiFailure (message: e.toString()));
      }
-    }else{
-      try{
-      final model = AuthHiveModel.fromEntity(entity);
-      final result = await _authDatasource.register(model);
-      if (result){
-        return Right(true);
-      } else {
-        return Left(LocalDatabaseFailure (message: "Registration failed"));
-      }
-      } catch (e) {
-      return Left(LocalDatabaseFailure (message: e.toString()));
-      }
-      }
+    }else {
+      return Left(ApiFailure (message: "No internet connection"));
     }
+  }
 }
