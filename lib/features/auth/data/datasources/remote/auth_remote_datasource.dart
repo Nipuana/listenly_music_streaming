@@ -30,8 +30,6 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
   
   @override
   Future<AuthApiModel?> login(String email, String password) async {
-    // TODO: implement login
-    throw UnimplementedError();
   }
 
   @override
