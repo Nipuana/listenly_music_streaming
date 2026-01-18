@@ -30,7 +30,7 @@ class AppSocialButton extends StatelessWidget {
           style: AppText.bodyMedium.copyWith(color: AppColors.textPrimary),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.inputBackground,
+          backgroundColor: AppColors.inputFill,
           foregroundColor: AppColors.textPrimary,
           elevation: 0,
           shape: RoundedRectangleBorder(
