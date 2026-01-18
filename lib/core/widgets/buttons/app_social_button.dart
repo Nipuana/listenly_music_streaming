@@ -41,13 +41,26 @@ class AppSocialButton extends StatelessWidget {
 
     Widget buildIcon() {
       if (assetIcon != null) {
-        return Image.asset(
-          assetIcon!,
+        return SizedBox(
           height: iconSize,
           width: iconSize,
+          child: Center(
+            child: Image.asset(
+              assetIcon!,
+              height: iconSize,
+              width: iconSize,
+              fit: BoxFit.contain,
+            ),
+          ),
         );
       }
-      return Icon(icon, size: iconSize, color: getIconColor());
+      return SizedBox(
+        height: iconSize,
+        width: iconSize,
+        child: Center(
+          child: Icon(icon, size: iconSize, color: getIconColor()),
+        ),
+      );
     }
 
     return SizedBox(

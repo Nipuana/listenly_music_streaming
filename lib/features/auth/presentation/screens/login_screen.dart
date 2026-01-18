@@ -203,7 +203,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         AppSocialButton(
                           text: 'Continue with Apple',
                           icon: FontAwesomeIcons.apple,
-                          iconSize: 22,
+                          iconSize: 26,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
