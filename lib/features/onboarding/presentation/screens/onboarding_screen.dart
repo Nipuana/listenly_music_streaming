@@ -39,7 +39,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -71,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           _slides[index]["title"]!,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: AppText.bold,
-                            color: AppColors.textPrimary,
+                            color: theme.colorScheme.onSurface,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           _slides[index]["subtitle"]!,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -122,7 +122,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: AppColors.surface,
+                      backgroundColor: theme.colorScheme.surface,
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(16),

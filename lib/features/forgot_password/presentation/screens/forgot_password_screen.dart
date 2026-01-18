@@ -5,6 +5,7 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dar
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -48,12 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         TextButton.icon(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
+                            AppRoutes.pushReplacement(context, const LoginScreen());
                           },
                           icon: const Icon(Icons.arrow_back, size: 20),
                           label: const Text('Back to login'),
@@ -134,12 +130,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                );
+                                AppRoutes.pushReplacement(context, const LoginScreen());
                               },
                               style: TextButton.styleFrom(
                                 foregroundColor: theme.colorScheme.primary,
