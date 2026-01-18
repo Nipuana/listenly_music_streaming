@@ -7,7 +7,7 @@ import 'package:weplay_music_streaming/features/auth/data/datasources/auth_datas
 import 'package:weplay_music_streaming/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_api_model.dart';
-import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
+// import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_repository.dart';
 
