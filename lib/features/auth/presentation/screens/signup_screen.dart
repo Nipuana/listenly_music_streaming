@@ -85,6 +85,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
       );
     }
   }

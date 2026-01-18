@@ -7,6 +7,7 @@ import 'package:weplay_music_streaming/features/auth/data/datasources/auth_datas
 import 'package:weplay_music_streaming/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_api_model.dart';
+import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_repository.dart';
 
@@ -92,8 +93,22 @@ class AuthRepository implements IAuthRepository {
      } catch (e) {
       return Left(ApiFailure (message: e.toString()));
      }
-    }else {
+    }else{
       return Left(ApiFailure (message: "No internet connection"));
+      }
+    //================code for local registration only================ 
+    // else{
+    //   try{
+    //   final model = AuthHiveModel.fromEntity(entity);
+    //   final result = await _authDatasource.register(model);
+    //   if (result){
+    //     return Right(true);
+    //   } else {
+    //     return Left(LocalDatabaseFailure (message: "Registration failed"));
+    //   }
+    //   } catch (e) {
+    //   return Left(LocalDatabaseFailure (message: e.toString()));
+    //   }
+    //   }
     }
   }
-}

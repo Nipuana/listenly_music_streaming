@@ -7,17 +7,20 @@ import 'package:weplay_music_streaming/features/auth/data/repositories/auth_repo
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_repository.dart';
 
+
 class RegisterUsecaseParams extends Equatable{
   final String username;
   final String email;
   final String? userType;
   final String password;
+  final String confirmPassword;
 
   const RegisterUsecaseParams({
     required this.username,
     required this.email,
     this.userType,
     required this.password,
+    required this.confirmPassword,
   });
 
   @override
@@ -25,7 +28,8 @@ class RegisterUsecaseParams extends Equatable{
     username,
     email,
     userType,
-    password
+    password,
+    confirmPassword
   ];
 }
 
@@ -49,6 +53,7 @@ class RegisterUsecase implements UsecaseWithParms<bool,RegisterUsecaseParams>{
       email: params.email,
       userType: params.userType ?? 'User',
       password: params.password,
+      confirmPassword: params.confirmPassword,
     );
     return _authRepository.register(entity);
   }

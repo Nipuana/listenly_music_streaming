@@ -1,11 +1,13 @@
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 
+
 class AuthApiModel {
 	final String? id;
 	final String username;
 	final String email;
 	final String userType;
 	final String? password;
+	final String? confirmPassword;
 	final String? profilePicture;
 
 	AuthApiModel({
@@ -14,6 +16,7 @@ class AuthApiModel {
 		required this.email,
 		required this.userType,
 		this.password,
+		this.confirmPassword,
 		this.profilePicture,
 	});
 
@@ -23,6 +26,7 @@ class AuthApiModel {
 			'email': email,
 			'userType': userType,
 			'password': password,
+			'confirmPassword': confirmPassword,
 			'profilePicture': profilePicture,
 		};
 	}
@@ -34,6 +38,7 @@ class AuthApiModel {
 			email: json['email'] as String,
 			userType: json['userType'] as String,
 			password: json['password'] as String?,
+			confirmPassword: json['confirmPassword'] as String?,
 			profilePicture: json['profilePicture'] as String?,
 		);
 	}
@@ -46,6 +51,7 @@ class AuthApiModel {
 			email: email,
 			userType: userType,
 			password: password,
+			confirmPassword: confirmPassword,
 			profilePicture: profilePicture,
 		);
 	}
@@ -57,6 +63,7 @@ class AuthApiModel {
 			email: entity.email,
 			userType: entity.userType,
 			password: entity.password,
+			confirmPassword: entity.confirmPassword,
 			profilePicture: entity.profilePicture,
 		);
 	}
