@@ -22,6 +22,8 @@ const LoginPopup({super.key});
       final base = theme.brightness == Brightness.dark ? AppColors.darkTextSecondary : AppColors.textSecondary;
       return base.withAlpha((opacity * 255).round());
     }
+    Color getPrimaryTextColor() => theme.brightness == Brightness.dark ? AppColors.darkTextPrimary : AppColors.textPrimary;
+    
     return Padding(
       padding: EdgeInsets.only(
         left: horizontalPadding,
@@ -47,7 +49,7 @@ const LoginPopup({super.key});
               'Login or sign up',
               style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: AppText.bold,
-                    color: AppColors.textPrimary,
+                    color: getPrimaryTextColor(),
                   ),
               textAlign: TextAlign.center,
             ),
@@ -81,7 +83,7 @@ const LoginPopup({super.key});
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.border),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
-                  foregroundColor: AppColors.textPrimary,
+                  foregroundColor: getPrimaryTextColor(),
                 ),
                 child: Text(isSmallScreen ? 'Sign up' : 'Sign up with us'),
               ),

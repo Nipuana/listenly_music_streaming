@@ -79,7 +79,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       } else if (next.status == AuthStatus.error && next.errorMessage != null){
         MysnackUtils.showError(
           context,
-          "invalid email or password",
+          "Invalid email or password",
         );
         
       }
@@ -87,16 +87,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
    
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 400;
-    final horizontalPadding = isSmallScreen ? 12.0 : AppSpacing.x6;
+    final horizontalPadding = isSmallScreen ? 4.0 : AppSpacing.x2;
     final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
-    final cardPadding = isSmallScreen ? 12.0 : AppSpacing.x6;
+    final cardPadding = isSmallScreen ? 8.0 : AppSpacing.x2;
+    Color getPrimaryTextColor() => theme.brightness == Brightness.dark ? AppColors.darkTextPrimary : AppColors.textPrimary;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: horizontalPadding,
-              vertical: AppSpacing.x6,
+              vertical: AppSpacing.x2,
             ),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxWidth),
@@ -108,13 +109,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const LogoWidget(size: 96),
-                        const SizedBox(height: AppSpacing.spaceY6),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        const LogoWidget(size: 88),
+                        const SizedBox(height: AppSpacing.spaceY4),
                         Text(
                           'Welcome back',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: AppText.bold,
-                            color: AppColors.textPrimary,
+                            color: getPrimaryTextColor(),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -193,15 +195,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: AppSpacing.spaceY4),
                         AppSocialButton(
                           text: 'Continue with Google',
-                          icon: FontAwesomeIcons.google,
-                          iconSize: 25,
+                          assetIcon: 'assets/icons/google_icon1.png',
+                          iconSize: 22,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY3),
                         AppSocialButton(
                           text: 'Continue with Apple',
-                          icon: Icons.apple,
-                          iconSize: 32,
+                          icon: FontAwesomeIcons.apple,
+                          iconSize: 22,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
