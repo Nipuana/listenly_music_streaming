@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/home_screen.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/library_screen.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/likes_screen.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/profile_screen.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/navigation_screens/search_screen.dart';
+import 'package:weplay_music_streaming/features/home/presentation/screens/home_screen.dart';
+import 'package:weplay_music_streaming/features/library/presentation/screens/library_screen.dart';
+import 'package:weplay_music_streaming/features/likes/presentation/screens/likes_screen.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/screens/profile_screen.dart';
+import 'package:weplay_music_streaming/features/search/presentation/screens/search_screen.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 
 class MyBottomNavigation extends StatefulWidget {
