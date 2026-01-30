@@ -49,7 +49,7 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
         elevation: 0,
         padding: EdgeInsets.zero,
         shape: const CircularNotchedRectangle(),
-        notchMargin: 10,
+        notchMargin: 6,
         clipBehavior: Clip.antiAlias,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -101,7 +101,7 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
     final isSelected = _selectedIndex == 2;
 
     return Transform.translate(
-      offset: const Offset(0, 20),
+      offset: const Offset(0, 5),
       child: GestureDetector(
         onTap: () => _onTab(2),
         child: Container(
