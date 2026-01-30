@@ -20,15 +20,18 @@ class AuthApiModel {
 		this.profilePicture,
 	});
 
-  	Map<String, dynamic> toJson() {
-		return {
+	Map<String, dynamic> toJson() {
+		final map = <String, dynamic>{
 			'username': username,
 			'email': email,
 			'userType': userType,
 			'password': password,
 			'confirmPassword': confirmPassword,
-			'profilePicture': profilePicture,
 		};
+		if (profilePicture != null) {
+			map['profilePicture'] = profilePicture;
+		}
+		return map;
 	}
 
 	factory AuthApiModel.fromJson(Map<String, dynamic> json) {
