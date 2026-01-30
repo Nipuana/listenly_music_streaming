@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
-import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_header.dart';
-import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_action_list.dart';
-import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_settings_list.dart';
-import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_logout_button.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/sections/header/profile_header.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/sections/actions/profile_action_list.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/sections/settings/profile_settings_list.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/sections/logout/profile_logout_button.dart';
 
 
 class ProfileScreen extends StatelessWidget {

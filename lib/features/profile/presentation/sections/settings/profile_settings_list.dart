@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
-import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_action_item.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/sections/actions/widgets/profile_action_item.dart';
 
-class ProfileActionList extends StatelessWidget {
-  const ProfileActionList({super.key});
+class ProfileSettingsList extends StatelessWidget {
+  const ProfileSettingsList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,9 @@ class ProfileActionList extends StatelessWidget {
         borderRadius: AppRadius.xl,
         child: Column(
           children: [
-            const ProfileActionItem(icon: Icons.edit, label: 'Edit Profile'),
-            const ProfileActionItem(icon: Icons.history, label: 'Listening History'),
-            const ProfileActionItem(icon: Icons.favorite_border, label: 'Favorites'),
+            const ProfileActionItem(icon: Icons.notifications_none, label: 'Notifications'),
+            const ProfileActionItem(icon: Icons.lock_outline, label: 'Privacy & Security'),
+            const ProfileActionItem(icon: Icons.graphic_eq, label: 'Audio Quality'),
             Material(
               color: Colors.transparent,
               child: InkWell(
@@ -41,12 +41,12 @@ class ProfileActionList extends StatelessWidget {
                           color: primaryColor.withValues(alpha: 0.1),
                           borderRadius: AppRadius.lg,
                         ),
-                        child: Icon(Icons.bar_chart, color: primaryColor, size: 22),
+                        child: Icon(Icons.info_outline, color: primaryColor, size: 22),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Your Stats',
+                          'About',
                           style: AppText.bodyMedium.copyWith(
                             color: textPrimary,
                             fontWeight: FontWeight.w500,
