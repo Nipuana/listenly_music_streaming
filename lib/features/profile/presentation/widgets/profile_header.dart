@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
+import 'package:weplay_music_streaming/core/constants/app_constants/app_boxes.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_stat.dart';
 
 class ProfileHeader extends StatelessWidget {
-  final Color surfaceColor;
-  final Color primaryColor;
-  final Color textPrimary;
-  final Color textSecondary;
-  final BoxShadow cardShadow;
+  const ProfileHeader({super.key});
 
-  const ProfileHeader({
-    super.key,
-    required this.surfaceColor,
-    required this.primaryColor,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.cardShadow,
-  });
+  final List<XFile> _selectedMedia = const [];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final surfaceColor = theme.cardColor;
+    final primaryColor = theme.colorScheme.primary;
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final cardShadow = isDark ? AppBoxes.darkCardShadow : AppBoxes.cardShadow;
     return Container(
       padding: AppSpacing.py8,
       color: surfaceColor,
@@ -82,12 +80,12 @@ class ProfileHeader extends StatelessWidget {
           ),
           AppSpacing.gap6,
           // Stats Row
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ProfileStat(count: '125', label: 'Liked Songs', primaryColor: primaryColor, textSecondary: textSecondary),
-              ProfileStat(count: '8', label: 'Playlists', primaryColor: primaryColor, textSecondary: textSecondary),
-              ProfileStat(count: '45', label: 'Following', primaryColor: primaryColor, textSecondary: textSecondary),
+              ProfileStat(count: '125', label: 'Liked Songs'),
+              ProfileStat(count: '8', label: 'Playlists'),
+              ProfileStat(count: '45', label: 'Following'),
             ],
           ),
         ],

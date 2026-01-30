@@ -90,7 +90,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final horizontalPadding = isSmallScreen ? 4.0 : AppSpacing.x2;
     final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
     final cardPadding = isSmallScreen ? 8.0 : AppSpacing.x2;
-    Color getPrimaryTextColor() => theme.brightness == Brightness.dark ? AppColors.darkTextPrimary : AppColors.textPrimary;
+    final primaryTextColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final secondaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -116,7 +117,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           'Welcome back',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: AppText.bold,
-                            color: getPrimaryTextColor(),
+                            color: primaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -124,7 +125,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Text(
                           'Log in to continue discovering and streaming your favorite tracks.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -134,7 +135,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           'Email',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -150,7 +151,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           'Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),

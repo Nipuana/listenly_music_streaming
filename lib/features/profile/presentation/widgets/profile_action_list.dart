@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_action_item.dart';
 
 class ProfileActionList extends StatelessWidget {
-  final Color primaryColor;
-  final Color textPrimary;
-
-  const ProfileActionList({
-    super.key,
-    required this.primaryColor,
-    required this.textPrimary,
-  });
+  const ProfileActionList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final surfaceColor = Theme.of(context).cardColor;
+    final theme = Theme.of(context);
+    final surfaceColor = theme.cardColor;
+    final primaryColor = theme.colorScheme.primary;
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Card(
       margin: AppSpacing.px4,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
@@ -27,9 +23,9 @@ class ProfileActionList extends StatelessWidget {
         borderRadius: AppRadius.xl,
         child: Column(
           children: [
-            ProfileActionItem(icon: Icons.edit, label: 'Edit Profile', primaryColor: primaryColor, textPrimary: textPrimary),
-            ProfileActionItem(icon: Icons.history, label: 'Listening History', primaryColor: primaryColor, textPrimary: textPrimary),
-            ProfileActionItem(icon: Icons.favorite_border, label: 'Favorites', primaryColor: primaryColor, textPrimary: textPrimary),
+            const ProfileActionItem(icon: Icons.edit, label: 'Edit Profile'),
+            const ProfileActionItem(icon: Icons.history, label: 'Listening History'),
+            const ProfileActionItem(icon: Icons.favorite_border, label: 'Favorites'),
             Material(
               color: Colors.transparent,
               child: InkWell(
@@ -57,7 +53,7 @@ class ProfileActionList extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Icon(Icons.chevron_right, color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textSecondary, size: 20),
+                      Icon(Icons.chevron_right, color: textSecondary, size: 20),
                     ],
                   ),
                 ),

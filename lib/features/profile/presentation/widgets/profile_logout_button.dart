@@ -4,17 +4,13 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.d
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 
 class ProfileLogoutButton extends StatelessWidget {
-  final Color surfaceColor;
-  final Color errorColor;
-
-  const ProfileLogoutButton({
-    super.key,
-    required this.surfaceColor,
-    required this.errorColor,
-  });
+  const ProfileLogoutButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final surfaceColor = theme.cardColor;
+    final errorColor = theme.colorScheme.error;
     return Padding(
       padding: AppSpacing.px4,
       child: Card(

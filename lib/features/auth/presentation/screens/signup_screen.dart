@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
@@ -115,8 +114,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final horizontalPadding = isSmallScreen ? 4.0 : AppSpacing.x2;
     final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
     final cardPadding = isSmallScreen ? 8.0 : AppSpacing.x2;
-    Color getPrimaryTextColor() => theme.brightness == Brightness.dark ? AppColors.darkTextPrimary : AppColors.textPrimary;
-    Color getSecondaryTextColor() => theme.brightness == Brightness.dark ? AppColors.darkTextSecondary : AppColors.textSecondary;
+    final primaryTextColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final secondaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -142,7 +141,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Create your account',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: AppText.bold,
-                            color: getPrimaryTextColor(),
+                            color: primaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -150,7 +149,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         Text(
                           'Join the community and start streaming right away.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: getSecondaryTextColor(),
+                            color: secondaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -160,7 +159,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Username',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -176,7 +175,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Email',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -192,7 +191,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -211,7 +210,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         Text(
                           'Must be at least 8 characters long',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
@@ -220,7 +219,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Confirm Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -258,7 +257,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                   text: TextSpan(
                                     text: 'I agree to the ',
                                     style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: getSecondaryTextColor(),
+                                      color: secondaryTextColor,
                                     ),
                                     children: [
                                       TextSpan(
@@ -271,7 +270,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                                       TextSpan(
                                         text: ' and ',
                                         style: TextStyle(
-                                          color: getSecondaryTextColor(),
+                                          color: secondaryTextColor,
                                         ),
                                       ),
                                       TextSpan(

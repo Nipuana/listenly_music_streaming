@@ -5,19 +5,15 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.
 import 'package:weplay_music_streaming/features/profile/presentation/widgets/profile_action_item.dart';
 
 class ProfileSettingsList extends StatelessWidget {
-  final Color primaryColor;
-  final Color textPrimary;
-
-  const ProfileSettingsList({
-    super.key,
-    required this.primaryColor,
-    required this.textPrimary,
-  });
+  const ProfileSettingsList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final surfaceColor = Theme.of(context).cardColor;
-    final textSecondary = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.grey;
+    final theme = Theme.of(context);
+    final surfaceColor = theme.cardColor;
+    final primaryColor = theme.colorScheme.primary;
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Card(
       margin: AppSpacing.px4,
       shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
@@ -27,9 +23,9 @@ class ProfileSettingsList extends StatelessWidget {
         borderRadius: AppRadius.xl,
         child: Column(
           children: [
-            ProfileActionItem(icon: Icons.notifications_none, label: 'Notifications', primaryColor: primaryColor, textPrimary: textPrimary),
-            ProfileActionItem(icon: Icons.lock_outline, label: 'Privacy & Security', primaryColor: primaryColor, textPrimary: textPrimary),
-            ProfileActionItem(icon: Icons.graphic_eq, label: 'Audio Quality', primaryColor: primaryColor, textPrimary: textPrimary),
+            const ProfileActionItem(icon: Icons.notifications_none, label: 'Notifications'),
+            const ProfileActionItem(icon: Icons.lock_outline, label: 'Privacy & Security'),
+            const ProfileActionItem(icon: Icons.graphic_eq, label: 'Audio Quality'),
             Material(
               color: Colors.transparent,
               child: InkWell(

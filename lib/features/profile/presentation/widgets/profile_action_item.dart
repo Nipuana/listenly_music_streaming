@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 
 class ProfileActionItem extends StatelessWidget {
   final IconData icon;
   final String label;
-  final Color primaryColor;
-  final Color textPrimary;
 
   const ProfileActionItem({
     super.key,
     required this.icon,
     required this.label,
-    required this.primaryColor,
-    required this.textPrimary,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textSecondary = Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textSecondary;
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Column(
       children: [
         Material(

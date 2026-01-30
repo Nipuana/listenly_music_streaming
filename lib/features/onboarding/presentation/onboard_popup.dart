@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
@@ -18,11 +17,12 @@ const LoginPopup({super.key});
     final isSmallScreen = screenWidth < 350;
     final horizontalPadding = isSmallScreen ? 10.0 : AppSpacing.x6;
     final verticalPadding = isSmallScreen ? 10.0 : AppSpacing.x4;
+    final primaryTextColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final secondaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    
     Color fadedTextSecondary(double opacity) {
-      final base = theme.brightness == Brightness.dark ? AppColors.darkTextSecondary : AppColors.textSecondary;
-      return base.withAlpha((opacity * 255).round());
+      return secondaryTextColor.withAlpha((opacity * 255).round());
     }
-    Color getPrimaryTextColor() => theme.brightness == Brightness.dark ? AppColors.darkTextPrimary : AppColors.textPrimary;
     
     return Padding(
       padding: EdgeInsets.only(
@@ -49,7 +49,7 @@ const LoginPopup({super.key});
               'Login or sign up',
               style: theme.textTheme.headlineSmall?.copyWith(
                     fontWeight: AppText.bold,
-                    color: getPrimaryTextColor(),
+                    color: primaryTextColor,
                   ),
               textAlign: TextAlign.center,
             ),
@@ -81,9 +81,9 @@ const LoginPopup({super.key});
                   AppRoutes.push(context, const SignupScreen());
                 },
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.border),
+                  side: BorderSide(color: theme.dividerColor),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
-                  foregroundColor: getPrimaryTextColor(),
+                  foregroundColor: primaryTextColor,
                 ),
                 child: Text(isSmallScreen ? 'Sign up' : 'Sign up with us'),
               ),

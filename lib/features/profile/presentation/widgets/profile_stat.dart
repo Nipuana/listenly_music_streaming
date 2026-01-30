@@ -5,19 +5,18 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.
 class ProfileStat extends StatelessWidget {
   final String count;
   final String label;
-  final Color primaryColor;
-  final Color textSecondary;
 
   const ProfileStat({
     super.key,
     required this.count,
     required this.label,
-    required this.primaryColor,
-    required this.textSecondary,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+    final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Padding(
       padding: AppSpacing.px4,
       child: Column(
