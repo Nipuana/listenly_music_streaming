@@ -130,4 +130,26 @@ class AuthRepository implements IAuthRepository {
     //   }
     //   }
     }
+
+  @override
+  Future<Either<Failure, AuthEntity>> updateUser(AuthEntity entity, {String? filePath}) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final apiModel = AuthApiModel.fromEntity(entity);
+        final result = await _authRemoteDatasource.updateUser(apiModel, filePath: filePath);
+        return Right(result.toEntity());
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data['message'] ?? "Update failed",
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: "No internet connection"));
+    }
+  }
   }

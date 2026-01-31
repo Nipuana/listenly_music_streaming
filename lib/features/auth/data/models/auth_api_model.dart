@@ -9,6 +9,7 @@ class AuthApiModel {
 	final String? password;
 	final String? confirmPassword;
 	final String? profilePicture;
+	final String? token;
 
 	AuthApiModel({
 		this.id,
@@ -18,6 +19,7 @@ class AuthApiModel {
 		this.password,
 		this.confirmPassword,
 		this.profilePicture,
+		this.token,
 	});
 
 	Map<String, dynamic> toJson() {
@@ -43,6 +45,7 @@ class AuthApiModel {
 			password: json['password'] as String?,
 			confirmPassword: json['confirmPassword'] as String?,
 			profilePicture: json['profilePicture'] as String?,
+			token: json['token'] as String?,
 		);
 	}
 
@@ -56,6 +59,7 @@ class AuthApiModel {
 			password: password,
 			confirmPassword: confirmPassword,
 			profilePicture: profilePicture,
+			token: token,
 		);
 	}
 
@@ -68,6 +72,7 @@ class AuthApiModel {
 			password: entity.password,
 			confirmPassword: entity.confirmPassword,
 			profilePicture: entity.profilePicture,
+			token: entity.token,
 		);
 	}
 
