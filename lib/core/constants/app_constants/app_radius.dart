@@ -5,6 +5,10 @@ class AppRadius {
   //radius
   static const double base = 10; 
 
+//rounded sm
+  static const BorderRadius sm =
+      BorderRadius.all(Radius.circular(4)); 
+
 //rounded lg
   static const BorderRadius lg =
       BorderRadius.all(Radius.circular(8)); 
