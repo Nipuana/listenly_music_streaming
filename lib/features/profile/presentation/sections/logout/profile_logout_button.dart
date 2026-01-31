@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
+import 'package:weplay_music_streaming/features/onboarding/presentation/screens/onboarding_screen.dart';
 
-class ProfileLogoutButton extends StatelessWidget {
+class ProfileLogoutButton extends ConsumerWidget {
   const ProfileLogoutButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final surfaceColor = theme.cardColor;
     final errorColor = theme.colorScheme.error;
+    
     return Padding(
       padding: AppSpacing.px4,
       child: Card(
@@ -21,7 +26,7 @@ class ProfileLogoutButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: () => _showLogoutDialog(context, ref),
             borderRadius: AppRadius.xl,
             child: Padding(
               padding: AppSpacing.px4.add(AppSpacing.py3),
@@ -54,5 +59,54 @@ class ProfileLogoutButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _performLogout(context, ref);
+            },
+            child: Text(
+              'Logout',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _performLogout(BuildContext context, WidgetRef ref) async {
+    // Call logout from viewmodel
+    final success = await ref.read(authViewModelProvider.notifier).logout();
+
+    if (context.mounted) {
+      if (success) {
+        // Navigate to onboarding and clear all previous routes
+        AppRoutes.pushAndRemoveUntil(
+          context,
+          const OnboardingScreen(),
+        );
+      } else {
+        // Show error
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to logout. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

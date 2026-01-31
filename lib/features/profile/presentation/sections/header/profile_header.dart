@@ -1,24 +1,78 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:weplay_music_streaming/core/api/api_endpoints.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_boxes.dart';
+import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/sections/header/widgets/profile_stat.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/sections/header/widgets/image_source_bottom_sheet.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/view_model/profile_view_model.dart';
+import 'package:weplay_music_streaming/features/profile/presentation/state/profile_state.dart';
 
-class ProfileHeader extends StatefulWidget {
+class ProfileHeader extends ConsumerStatefulWidget {
   const ProfileHeader({super.key});
 
   @override
-  State<ProfileHeader> createState() => _ProfileHeaderState();
+  ConsumerState<ProfileHeader> createState() => _ProfileHeaderState();
 }
 
-class _ProfileHeaderState extends State<ProfileHeader> {
+class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
   final ImagePicker _imagePicker = ImagePicker();
   XFile? _selectedImage;
+  String? _username;
+  String? _email;
+  String? _profilePicture;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Reload user data when the widget rebuilds (e.g., when navigating back)
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    final userSessionService = ref.read(userSessionServiceProvider);
+    if (mounted) {
+      setState(() {
+        _username = userSessionService.getCurrentUserUsername() ?? 'User';
+        _email = userSessionService.getCurrentUserEmail() ?? 'user@email.com';
+        _profilePicture = userSessionService.getCurrentUserProfilePicture();
+      });
+    }
+  }
+
+  String _getInitials(String name) {
+    final parts = name.trim().split(' ');
+    if (parts.isEmpty) return 'U';
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return '${parts[0][0]}${parts[parts.length - 1][0]}'.toUpperCase();
+  }
+
+  String _getFullImageUrl(String? imagePath) {
+    if (imagePath == null || imagePath.isEmpty) return '';
+    
+    // If already a full URL, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    
+    // Remove /api/ from base URL and remove leading slash from imagePath
+    final baseUrl = ApiEndpoints.baseUrl.replaceAll('/api/', '').replaceAll('/api', '');
+    final cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+    
+    return '$baseUrl/$cleanPath';
+  }
 
   void _showPermissionDialog(BuildContext context, String permissionType) {
     showDialog(
@@ -71,6 +125,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         setState(() {
           _selectedImage = image;
         });
+        
+        // Upload profile picture to backend
+        await ref.read(profileViewModelProvider.notifier).updateUser(
+          filePath: image.path,
+        );
       }
     } else if (status.isDenied || status.isPermanentlyDenied) {
       if (mounted) {
@@ -92,6 +151,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         setState(() {
           _selectedImage = image;
         });
+        
+        // Upload profile picture to backend
+        await ref.read(profileViewModelProvider.notifier).updateUser(
+          filePath: image.path,
+        );
       }
     } else if (status.isDenied || status.isPermanentlyDenied) {
       if (mounted) {
@@ -128,6 +192,33 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     final textPrimary = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final textSecondary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     final cardShadow = isDark ? AppBoxes.darkCardShadow : AppBoxes.cardShadow;
+    
+    // Listen to profile state changes
+    ref.listen<ProfileState>(profileViewModelProvider, (previous, next) {
+      if (next.status == ProfileStatus.success) {
+        _loadUserData(); // Reload user data from session
+        setState(() {
+          _selectedImage = null; // Clear selected image to show network image
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile picture updated successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else if (next.status == ProfileStatus.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.errorMessage ?? 'Failed to update profile picture'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+    
+    final profileState = ref.watch(profileViewModelProvider);
+    final isLoading = profileState.status == ProfileStatus.loading;
+    
     return Container(
       padding: AppSpacing.py8,
       color: surfaceColor,
@@ -135,7 +226,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         children: [
           // Avatar
           GestureDetector(
-            onTap: () => _showImageSourceOptions(context),
+            onTap: isLoading ? null : () => _showImageSourceOptions(context),
             child: Stack(
               children: [
                 Container(
@@ -158,19 +249,26 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: _selectedImage != null ? Colors.transparent : primaryColor,
+                      color: (_selectedImage != null || _profilePicture != null) 
+                          ? Colors.transparent 
+                          : primaryColor,
                       borderRadius: AppRadius.full,
                       image: _selectedImage != null
                           ? DecorationImage(
                               image: FileImage(File(_selectedImage!.path)),
                               fit: BoxFit.cover,
                             )
-                          : null,
+                          : _profilePicture != null && _profilePicture!.isNotEmpty
+                              ? DecorationImage(
+                                  image: NetworkImage(_getFullImageUrl(_profilePicture)),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                     ),
                     alignment: Alignment.center,
-                    child: _selectedImage == null
+                    child: (_selectedImage == null && (_profilePicture == null || _profilePicture!.isEmpty))
                         ? Text(
-                            'JD',
+                            _getInitials(_username ?? 'User'),
                             style: AppText.headline.copyWith(
                               color: Colors.white,
                               fontSize: 32,
@@ -200,13 +298,27 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     ),
                   ),
                 ),
+                if (isLoading)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        borderRadius: AppRadius.full,
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
           AppSpacing.gap4,
           // Name
           Text(
-            'John Doe',
+            _username ?? 'User',
             style: AppText.headline.copyWith(
               color: textPrimary,
               fontSize: 20,
@@ -215,7 +327,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           AppSpacing.gap2,
           // Email
           Text(
-            'john.doe@email.com',
+            _email ?? 'user@email.com',
             style: AppText.body.copyWith(
               color: textSecondary,
               fontSize: 14,
