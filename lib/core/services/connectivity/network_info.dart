@@ -35,7 +35,7 @@ class NetworkInfo implements INetworkInfo {
 
   Future<bool> _checkNetworkConn() async {
     try {
-      final result = await InternetAddress.lookup('google.come');
+      final result = await InternetAddress.lookup('google.com');
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } catch (e) {
       return false;

@@ -1,12 +1,15 @@
 import 'package:weplay_music_streaming/features/auth/domain/entities/auth_entities.dart';
 
+
 class AuthApiModel {
 	final String? id;
 	final String username;
 	final String email;
 	final String userType;
 	final String? password;
+	final String? confirmPassword;
 	final String? profilePicture;
+	final String? token;
 
 	AuthApiModel({
 		this.id,
@@ -14,17 +17,23 @@ class AuthApiModel {
 		required this.email,
 		required this.userType,
 		this.password,
+		this.confirmPassword,
 		this.profilePicture,
+		this.token,
 	});
 
-  	Map<String, dynamic> toJson() {
-		return {
+	Map<String, dynamic> toJson() {
+		final map = <String, dynamic>{
 			'username': username,
 			'email': email,
 			'userType': userType,
 			'password': password,
-			'profilePicture': profilePicture,
+			'confirmPassword': confirmPassword,
 		};
+		if (profilePicture != null) {
+			map['profilePicture'] = profilePicture;
+		}
+		return map;
 	}
 
 	factory AuthApiModel.fromJson(Map<String, dynamic> json) {
@@ -32,9 +41,11 @@ class AuthApiModel {
 			id: json['_id'] as String?,
 			username: json['username'] as String,
 			email: json['email'] as String,
-			userType: json['userType'] as String,
+			userType: json['role'] as String,
 			password: json['password'] as String?,
+			confirmPassword: json['confirmPassword'] as String?,
 			profilePicture: json['profilePicture'] as String?,
+			token: json['token'] as String?,
 		);
 	}
 
@@ -46,7 +57,9 @@ class AuthApiModel {
 			email: email,
 			userType: userType,
 			password: password,
+			confirmPassword: confirmPassword,
 			profilePicture: profilePicture,
+			token: token,
 		);
 	}
 
@@ -57,7 +70,9 @@ class AuthApiModel {
 			email: entity.email,
 			userType: entity.userType,
 			password: entity.password,
+			confirmPassword: entity.confirmPassword,
 			profilePicture: entity.profilePicture,
+			token: entity.token,
 		);
 	}
 

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weplay_music_streaming/app/routes/app_routes.dart';
@@ -96,20 +97,29 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final logoSize = screenWidth < 360 ? 100.0 : 120.0;
-    final titleFontSize = screenWidth < 360 ? 26.0 : 32.0;
-    final verticalSpacing = screenHeight < 700 ? 30.0 : 40.0;
+    // final screenHeight = MediaQuery.of(context).size.height;
+    final logoSize = screenWidth < 360 ? 120.0 : 150.0;
+    final titleFontSize = screenWidth < 360 ? 36.0 : 44.0;
+    final subtitleFontSize = screenWidth < 360 ? 14.0 : 16.0;
+    
+    // Get theme brightness
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF0a0a0a) : const Color(0xFFf5f5f5);
+    final accentColor = isDark ? AppColors.primary : AppColors.primary;
+    final textColor = isDark ? Colors.white : const Color(0xFF1a1a1a);
+    final subtextColor = isDark ? Colors.white70 : const Color(0xFF666666);
+    
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: bgColor,
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: SafeArea(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(flex: 3),
-              // Logo Section (use logo asset as before)
+              const Spacer(flex: 2),
+              // Logo Section - Clean and minimal
               AnimatedBuilder(
                 animation: _scaleController,
                 builder: (context, child) {
@@ -120,22 +130,31 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
                       child: Container(
                         width: logoSize,
                         height: logoSize,
+                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.6),
-                              blurRadius: 70,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
+                          color: accentColor.withOpacity(0.1),
+                          border: Border.all(
+                            color: accentColor.withOpacity(0.2),
+                            width: 2,
+                          ),
                         ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/logo.png',
-                            fit: BoxFit.contain,
-                            color: AppColors.white80,
-                            colorBlendMode: BlendMode.modulate,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: accentColor.withOpacity(0.2),
+                                blurRadius: 20,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
                       ),
@@ -143,59 +162,68 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
                   );
                 },
               ),
-              SizedBox(height: verticalSpacing),
-              // Tagline (as before)
+              const SizedBox(height: 48),
+              // App Name and Tagline
               FadeTransition(
                 opacity: _fadeAnimation,
                 child: SlideTransition(
                   position: _slideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      children: [
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            'Your music, your way',
-                            style: TextStyle(
-                              fontSize: titleFontSize,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.white90,
-                              letterSpacing: -0.5,
-                            ),
-                          ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Listenly',
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.w800,
+                          color: textColor,
+                          letterSpacing: -0.5,
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Your music, your way',
+                        style: TextStyle(
+                          fontSize: subtitleFontSize,
+                          fontWeight: FontWeight.w400,
+                          color: subtextColor,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const Spacer(flex: 3),
-              // Loading indicator (animated dots as before)
+              const Spacer(flex: 2),
+              // Minimal loading indicator
               FadeTransition(
                 opacity: _fadeAnimation,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(3, (i) {
-                    return AnimatedBuilder(
-                      animation: _scaleController,
-                      builder: (context, child) {
-                        double delay = i * 0.2;
-                        double value = (_scaleController.value - delay) % 1.0;
-                        double dy = -8 * (1 - (value * 2 - 1).abs());
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppColors.white80,
-                            shape: BoxShape.circle,
-                          ),
-                          transform: Matrix4.translationValues(0, dy, 0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: List.generate(5, (i) {
+                        return AnimatedBuilder(
+                          animation: _scaleController,
+                          builder: (context, child) {
+                            double delay = i * 0.15;
+                            double value = (_scaleController.value - delay).clamp(0.0, 1.0);
+                            double height = 3 + (16 * (0.5 + 0.5 * sin(value * 2 * pi)));
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                              width: 3,
+                              height: height,
+                              decoration: BoxDecoration(
+                                color: accentColor,
+                                borderRadius: BorderRadius.circular(1.5),
+                              ),
+                            );
+                          },
                         );
-                      },
-                    );
-                  }),
+                      }),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
                 ),
               ),
               const Spacer(flex: 1),

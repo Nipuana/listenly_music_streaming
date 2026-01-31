@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
@@ -85,6 +84,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
       );
     }
   }
@@ -109,31 +109,39 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
 
     final theme = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 400;
+    final horizontalPadding = isSmallScreen ? 4.0 : AppSpacing.x2;
+    final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
+    final cardPadding = isSmallScreen ? 8.0 : AppSpacing.x2;
+    final primaryTextColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final secondaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.x6,
-              vertical: AppSpacing.x6,
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: AppSpacing.x2,
             ),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 480),
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.x6),
+                  padding: EdgeInsets.all(cardPadding),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const LogoWidget(size: 96),
-                        const SizedBox(height: AppSpacing.spaceY6),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        const LogoWidget(size: 88),
+                        const SizedBox(height: AppSpacing.spaceY4),
                         Text(
                           'Create your account',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: AppText.bold,
-                            color: AppColors.textPrimary,
+                            color: primaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -141,7 +149,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         Text(
                           'Join the community and start streaming right away.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -151,7 +159,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Username',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -167,7 +175,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Email',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -183,7 +191,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -202,7 +210,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         Text(
                           'Must be at least 8 characters long',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY4),
@@ -211,7 +219,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           'Confirm Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -229,41 +237,50 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         const SizedBox(height: AppSpacing.spaceY3 / 1.5),
                         // Terms & Conditions
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Checkbox(
-                              value: _agreedToTerms,
-                              onChanged: _onTermsChanged,
+                            SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: Checkbox(
+                                value: _agreedToTerms,
+                                onChanged: _onTermsChanged,
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                visualDensity: VisualDensity.compact,
+                              ),
                             ),
+                            const SizedBox(width: 8),
                             Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: GestureDetector(
-                                  onTap: _toggleTerms,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: 'I agree to the ',
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        color: AppColors.textPrimary,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: 'Terms & Conditions',
-                                          style: TextStyle(
-                                            color: theme.colorScheme.primary,
-                                            fontWeight: AppText.medium,
-                                          ),
-                                        ),
-                                        const TextSpan(text: ' and '),
-                                        TextSpan(
-                                          text: 'Privacy Policy',
-                                          style: TextStyle(
-                                            color: theme.colorScheme.primary,
-                                            fontWeight: AppText.medium,
-                                          ),
-                                        ),
-                                      ],
+                              child: GestureDetector(
+                                onTap: _toggleTerms,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'I agree to the ',
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: secondaryTextColor,
                                     ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Terms & Conditions',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                          fontWeight: AppText.medium,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: ' and ',
+                                        style: TextStyle(
+                                          color: secondaryTextColor,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'Privacy Policy',
+                                        style: TextStyle(
+                                          color: theme.colorScheme.primary,
+                                          fontWeight: AppText.medium,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -290,15 +307,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         const SizedBox(height: AppSpacing.spaceY4),
                         AppSocialButton(
                           text: 'Continue with Google',
-                          icon: FontAwesomeIcons.google,
-                          iconSize: 25,
+                          assetIcon: 'assets/icons/google_icon1.png',
+                          iconSize: 22,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY3),
                         AppSocialButton(
                           text: 'Continue with Apple',
                           icon: FontAwesomeIcons.apple,
-                          iconSize: 30,
+                          iconSize: 26,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),

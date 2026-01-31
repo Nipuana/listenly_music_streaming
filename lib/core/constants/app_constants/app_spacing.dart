@@ -13,6 +13,7 @@ class AppSpacing {
   // Directional padding
   static const EdgeInsets px4 = EdgeInsets.symmetric(horizontal: 16);
   static const EdgeInsets px6 = EdgeInsets.symmetric(horizontal: 24);
+  static const EdgeInsets px8 = EdgeInsets.symmetric(horizontal: 32);
   static const EdgeInsets px12 = EdgeInsets.symmetric(horizontal: 48);
 
   static const EdgeInsets py2 = EdgeInsets.symmetric(vertical: 8);
@@ -20,14 +21,20 @@ class AppSpacing {
   static const EdgeInsets py4 = EdgeInsets.symmetric(vertical: 16);
   static const EdgeInsets py8 = EdgeInsets.symmetric(vertical: 32);
   
+  // All padding
+  static const EdgeInsets p6 = EdgeInsets.all(24);
+  
   // Margins
   static const EdgeInsets m4 = EdgeInsets.all(16);
+  static const EdgeInsets mx1 = EdgeInsets.symmetric(horizontal: 4);
 
   static const EdgeInsets mb1 = EdgeInsets.only(bottom: 4);
   static const EdgeInsets mb3 = EdgeInsets.only(bottom: 12);
   static const EdgeInsets mb4 = EdgeInsets.only(bottom: 16);
   static const EdgeInsets mb6 = EdgeInsets.only(bottom: 24);
   static const EdgeInsets mb8 = EdgeInsets.only(bottom: 32);
+
+  static const EdgeInsets pb6 = EdgeInsets.only(bottom: 24);
 
   static const EdgeInsets mt4 = EdgeInsets.only(top: 16);
   static const EdgeInsets mt6 = EdgeInsets.only(top: 24);
@@ -41,6 +48,8 @@ class AppSpacing {
   static const SizedBox gap3 = SizedBox(height: 12);
   static const SizedBox gap4 = SizedBox(height: 16);
   static const SizedBox gap6 = SizedBox(height: 24);
+  static const SizedBox gapY4 = SizedBox(height: 16);
+  static const SizedBox gapY12 = SizedBox(height: 48);
 
   // Horizontal gaps
   static const SizedBox hGap2 = SizedBox(width: 8);

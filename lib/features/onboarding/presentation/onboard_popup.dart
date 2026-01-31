@@ -1,96 +1,106 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
-
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/signup_screen.dart';
+import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 
 class LoginPopup extends StatelessWidget {
 const LoginPopup({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 350;
+    final horizontalPadding = isSmallScreen ? 10.0 : AppSpacing.x6;
+    final verticalPadding = isSmallScreen ? 10.0 : AppSpacing.x4;
+    final primaryTextColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final secondaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    
+    Color fadedTextSecondary(double opacity) {
+      return secondaryTextColor.withAlpha((opacity * 255).round());
+    }
+    
     return Padding(
       padding: EdgeInsets.only(
-        left: AppSpacing.x6,
-        right: AppSpacing.x6,
-        top: AppSpacing.x4,
-        bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.x4,
+        left: horizontalPadding,
+        right: horizontalPadding,
+        top: verticalPadding,
+        bottom: MediaQuery.of(context).viewInsets.bottom + verticalPadding,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              icon: const Icon(Icons.close, size: 22),
-              color: AppColors.textSecondary,
-              onPressed: () => Navigator.pop(context),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: isSmallScreen ? screenWidth * 0.98 : 400),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: const Icon(Icons.close, size: 22),
+                color: fadedTextSecondary(0.7),
+                onPressed: () => Navigator.pop(context),
+              ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.spaceY3),
-          Text(
-            'Login or sign up',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: AppText.bold,
-                  color: AppColors.textPrimary,
-                ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.spaceY3),
-          Text(
-            'Please select your preferred method to continue setting up your account.',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-          ),
-          const SizedBox(height: AppSpacing.spaceY4),
-          AppButton(
-            text: 'Already have an account? Log in',
-            icon: const Icon(Icons.mail_outline, color: Colors.white),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-          ),
-          const SizedBox(height: AppSpacing.spaceY3),
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: OutlinedButton(
+            const SizedBox(height: AppSpacing.spaceY3),
+            Text(
+              'Login or sign up',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: AppText.bold,
+                    color: primaryTextColor,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.spaceY3),
+            if (!isSmallScreen)
+              Text(
+                'Please select your preferred method to continue setting up your account.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                      color: fadedTextSecondary(0.7),
+                    ),
+              ),
+            const SizedBox(height: AppSpacing.spaceY4),
+            AppButton(
+              text: isSmallScreen ? 'Log in' : 'Already have an account? ',
+              icon: const Icon(Icons.mail_outline, color: Colors.white),
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignupScreen()),
-                );
+                AppRoutes.push(context, const LoginScreen());
               },
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: AppColors.border),
-                shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
-                foregroundColor: AppColors.textPrimary,
-              ),
-              child: const Text('Sign up with us'),
             ),
-          ),
-          const SizedBox(height: AppSpacing.spaceY4),
-          Text(
-            'If you are creating a new account, Terms & Conditions and Privacy Policy will apply.',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.textSecondary,
+            const SizedBox(height: AppSpacing.spaceY3),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  AppRoutes.push(context, const SignupScreen());
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: theme.dividerColor),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.xl),
+                  foregroundColor: primaryTextColor,
                 ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.spaceY3),
-        ],
+                child: Text(isSmallScreen ? 'Sign up' : 'Sign up with us'),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.spaceY4),
+            if (!isSmallScreen)
+              Text(
+                'If you are creating a new account, Terms & Conditions and Privacy Policy will apply.',
+                style: theme.textTheme.bodySmall?.copyWith(
+                      color: fadedTextSecondary(0.7),
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            const SizedBox(height: AppSpacing.spaceY3),
+          ],
+        ),
       ),
     );
-  }
+}
 }

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
@@ -79,37 +78,45 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       } else if (next.status == AuthStatus.error && next.errorMessage != null){
         MysnackUtils.showError(
           context,
-          "invalid email or password",
+          "Invalid email or password",
         );
         
       }
     });
    
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 400;
+    final horizontalPadding = isSmallScreen ? 4.0 : AppSpacing.x2;
+    final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
+    final cardPadding = isSmallScreen ? 8.0 : AppSpacing.x2;
+    final primaryTextColor = theme.colorScheme.onSurface;
+    final secondaryTextColor = theme.colorScheme.onSurfaceVariant;
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.x6,
-              vertical: AppSpacing.x6,
+            padding: EdgeInsets.symmetric(
+              horizontal: horizontalPadding,
+              vertical: AppSpacing.x2,
             ),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 480),
+              constraints: BoxConstraints(maxWidth: maxWidth),
               child: Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.x6),
+                  padding: EdgeInsets.all(cardPadding),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const LogoWidget(size: 96),
-                        const SizedBox(height: AppSpacing.spaceY6),
+                        const SizedBox(height: AppSpacing.spaceY4),
+                        const LogoWidget(size: 88),
+                        const SizedBox(height: AppSpacing.spaceY4),
                         Text(
                           'Welcome back',
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: AppText.bold,
-                            color: AppColors.textPrimary,
+                            color: primaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -117,7 +124,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Text(
                           'Log in to continue discovering and streaming your favorite tracks.',
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -127,7 +134,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           'Email',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -143,7 +150,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           'Password',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: AppText.medium,
-                            color: AppColors.textSecondary,
+                            color: secondaryTextColor,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.spaceY3 / 3),
@@ -188,15 +195,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const SizedBox(height: AppSpacing.spaceY4),
                         AppSocialButton(
                           text: 'Continue with Google',
-                          icon: FontAwesomeIcons.google,
-                          iconSize: 25,
+                          assetIcon: 'assets/icons/google_icon1.png',
+                          iconSize: 22,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY3),
                         AppSocialButton(
                           text: 'Continue with Apple',
-                          icon: Icons.apple,
-                          iconSize: 32,
+                          icon: FontAwesomeIcons.apple,
+                          iconSize: 26,
                           onPressed: () {},
                         ),
                         const SizedBox(height: AppSpacing.spaceY6),
