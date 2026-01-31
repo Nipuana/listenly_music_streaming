@@ -111,7 +111,7 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
     
     return Scaffold(
       backgroundColor: bgColor,
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: SafeArea(

@@ -89,8 +89,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final horizontalPadding = isSmallScreen ? 4.0 : AppSpacing.x2;
     final maxWidth = isSmallScreen ? screenWidth * 0.98 : 480.0;
     final cardPadding = isSmallScreen ? 8.0 : AppSpacing.x2;
-    final primaryTextColor = theme.textTheme.bodyLarge?.color ?? Colors.black;
-    final secondaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final primaryTextColor = theme.colorScheme.onSurface;
+    final secondaryTextColor = theme.colorScheme.onSurfaceVariant;
     return Scaffold(
       body: SafeArea(
         child: Center(

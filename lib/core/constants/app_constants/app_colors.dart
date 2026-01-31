@@ -20,12 +20,14 @@ class AppColors {
   static const Color accent3 = Color(0xFF0EA5E9);
 
   // ─────────────────────────────────────────────
-  // Neutral Colors
+  // Neutral Colors (Light Bluish Theme)
   // ─────────────────────────────────────────────
-  static const Color background = Color(0xFFF8FAFC);
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFF1F5F9);
-  static const Color inputFill = Color(0xFFF3F4F6);
+  static const Color background = Color(0xFFE8F4FF); // Vibrant blue background
+  static const Color backgroundGradientStart = Color(0xFFE0EFFF); // Gradient start
+  static const Color backgroundGradientEnd = Color(0xFFF0F8FF); // Gradient end
+  static const Color surface = Color(0xFFFFFFFF); // Pure white surface for contrast
+  static const Color surfaceVariant = Color(0xFFD6ECFF); // Bright sky blue
+  static const Color inputFill = Color(0xFFF5FAFF); // Clean blue-white input
 
   // ─────────────────────────────────────────────
   // Text Colors
@@ -43,8 +45,8 @@ class AppColors {
   // ─────────────────────────────────────────────
   // Border & Divider
   // ─────────────────────────────────────────────
-  static const Color border = Color(0xFFE2E8F0);
-  static const Color divider = Color(0xFFF1F5F9);
+  static const Color border = Color(0xFFB8DAFF); // Vibrant blue border
+  static const Color divider = Color(0xFFD1E7FF); // Clear blue divider
 
   // ─────────────────────────────────────────────
   // Status Colors
@@ -116,7 +118,13 @@ class AppColors {
   static const LinearGradient backgroundGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [background, surface],
+    colors: [backgroundGradientStart, backgroundGradientEnd],
+  );
+  
+  static const LinearGradient lightBackgroundGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFE0EFFF), Color(0xFFF0F8FF), Color(0xFFE8F4FF)],
   );
 
   // Item Status Gradients

@@ -26,7 +26,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: AppColors.surface,
+        backgroundColor: Color(0xFFFFFFFF),
         foregroundColor: AppColors.textPrimary,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         titleTextStyle: TextStyle(
@@ -34,6 +34,7 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: AppColors.textPrimary,
         ),
+        shadowColor: Color(0x1A4F46E5),
       ),
 
       // ───────── Input Fields ─────────
@@ -69,7 +70,7 @@ class AppTheme {
       // ───────── Buttons ─────────
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          elevation: 0,
+          elevation: 3,
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -80,7 +81,7 @@ class AppTheme {
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
-          shadowColor: AppBoxes.buttonShadow.color,
+          shadowColor: AppColors.primary.withOpacity(0.3),
         ),
       ),
 
@@ -101,11 +102,11 @@ class AppTheme {
       // ───────── Cards ─────────
       cardTheme: CardThemeData(
         color: AppColors.surface,
-        elevation: 0,
-        shadowColor: AppBoxes.cardShadow.color,
+        elevation: 2,
+        shadowColor: AppColors.primary.withOpacity(0.08),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.border),
+          side: const BorderSide(color: AppColors.border, width: 1),
         ),
       ),
 
