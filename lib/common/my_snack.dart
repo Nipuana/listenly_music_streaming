@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../core/constants/app_constants/app_colors.dart';
 import '../core/constants/app_constants/app_radius.dart';
-import '../core/constants/app_constants/app_text.dart';
 
+import '../core/utils/mysnack_utils.dart';
 class MySnack {
 	static void show(
 		BuildContext context, {
@@ -14,39 +14,15 @@ class MySnack {
 		IconData? icon,
 		SnackBarAction? customAction,
 	}) {
-		final snackBar = SnackBar(
+		MysnackUtils.showCustom(
+			context,
+			message,
 			backgroundColor: backgroundColor ?? AppColors.surface,
-			behavior: SnackBarBehavior.floating,
-			elevation: 6,
+			textColor: textColor ?? AppColors.textPrimary,
+			icon: icon ?? Icons.info_outline_rounded,
 			shape: RoundedRectangleBorder(
 				borderRadius: AppRadius.xl,
 			),
-			content: Row(
-				children: [
-					if (icon != null)
-						Padding(
-							padding: const EdgeInsets.only(right: 8.0),
-							child: Icon(icon, color: textColor ?? AppColors.textPrimary, size: 22),
-						),
-					Expanded(
-						child: Text(
-							message,
-							style: AppText.body.copyWith(
-								color: textColor ?? AppColors.textPrimary,
-							),
-						),
-					),
-				],
-			),
-			action: customAction ?? (actionLabel != null && onAction != null
-					? SnackBarAction(
-							label: actionLabel,
-							onPressed: onAction,
-							textColor: AppColors.link,
-						)
-					: null),
-			margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 		);
-		ScaffoldMessenger.of(context).showSnackBar(snackBar);
 	}
 }
