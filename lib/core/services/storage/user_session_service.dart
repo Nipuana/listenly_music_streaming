@@ -58,6 +58,11 @@ class UserSessionService {
     return _prefs.getString(_keyUserEmail);
   }
 
+  // Get current user type/role
+  String? getUserType() {
+    return _prefs.getString(_keyUserType);
+  }
+
   // Get current user full name
   String? getCurrentUserFullName() {
     return _prefs.getString(_keyUserType);
