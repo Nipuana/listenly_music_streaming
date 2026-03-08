@@ -1,7 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 
 class MysnackUtils {
+  static OverlayEntry? _currentEntry;
+  static Timer? _dismissTimer;
+
+  static void showCustom(
+    BuildContext context,
+    String message, {
+    required Color backgroundColor,
+    required IconData icon,
+    Color? textColor,
+    ShapeBorder? shape,
+  }) {
+    _showSnackBar(
+      context,
+      message,
+      backgroundColor: backgroundColor,
+      icon: icon,
+      textStyle: TextStyle(
+        color: textColor ?? Colors.white,
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+      ),
+      shape: shape,
+    );
+  }
+
   static void showError(BuildContext context, String message) {
     _showSnackBar(
       context,
@@ -70,30 +97,71 @@ class MysnackUtils {
     TextStyle? textStyle,
     ShapeBorder? shape,
   }) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(icon, color: textStyle?.color ?? Colors.white, size: 24),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                message,
-                style: textStyle ?? const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+    final overlay = Overlay.maybeOf(context, rootOverlay: true);
+    if (overlay == null) {
+      return;
+    }
+
+    _dismissTimer?.cancel();
+    _currentEntry?.remove();
+
+    final mediaQuery = MediaQuery.of(context);
+    final bottomOffset = mediaQuery.viewPadding.bottom + 96;
+
+    _currentEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: 16,
+        right: 16,
+        bottom: bottomOffset,
+        child: IgnorePointer(
+          ignoring: true,
+          child: Material(
+            color: Colors.transparent,
+            child: SafeArea(
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: backgroundColor,
+                  shape: shape ?? RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shadows: const [
+                    BoxShadow(
+                      color: Color(0x22000000),
+                      blurRadius: 16,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Row(
+                    children: [
+                      Icon(icon, color: textStyle?.color ?? Colors.white, size: 24),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          message,
+                          style: textStyle ?? const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
-        backgroundColor: backgroundColor,
-        behavior: SnackBarBehavior.floating,
-        shape: shape,
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 2),
       ),
     );
+
+    overlay.insert(_currentEntry!);
+
+    _dismissTimer = Timer(const Duration(seconds: 2), () {
+      _currentEntry?.remove();
+      _currentEntry = null;
+      _dismissTimer = null;
+    });
   }
 }
