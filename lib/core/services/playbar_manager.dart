@@ -39,6 +39,7 @@ class PlaybarManager extends ChangeNotifier {
 
   static const _prefsKey = 'playbar_audio_allowed';
   static const _recentSongsKey = 'recent_songs';
+  static const _recentSongsDateKey = 'recent_songs_date';
   static const _storage = FlutterSecureStorage();
   bool _audioAllowed = false;
 
@@ -120,6 +121,19 @@ class PlaybarManager extends ChangeNotifier {
 
   Future<void> _loadRecentSongs() async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final today = _todayDateString();
+      final savedDate = prefs.getString(_recentSongsDateKey);
+
+      // Different calendar day → wipe persisted list so UI starts fresh
+      if (savedDate != today) {
+        await _storage.delete(key: _recentSongsKey);
+        await prefs.remove(_recentSongsDateKey);
+        _recentSongs.clear();
+        notifyListeners();
+        return;
+      }
+
       final jsonString = await _storage.read(key: _recentSongsKey);
       if (jsonString != null && jsonString.isNotEmpty) {
         final List<dynamic> jsonList = jsonDecode(jsonString);
@@ -138,9 +152,30 @@ class PlaybarManager extends ChangeNotifier {
       final jsonList = _recentSongs.map((song) => song.toJson()).toList();
       final jsonString = jsonEncode(jsonList);
       await _storage.write(key: _recentSongsKey, value: jsonString);
+      // Update the date stamp so the daily check knows when this was last written
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_recentSongsDateKey, _todayDateString());
     } catch (e) {
       // If saving fails, continue silently
     }
+  }
+
+  /// Clears recently played songs from memory and persistent storage.
+  /// Called on logout and automatically on the first load of a new calendar day.
+  Future<void> clearRecentSongs() async {
+    _recentSongs.clear();
+    notifyListeners();
+    try {
+      await _storage.delete(key: _recentSongsKey);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_recentSongsDateKey);
+    } catch (_) {}
+  }
+
+  /// Returns today's date as a compact string (e.g. '2026-03-08').
+  String _todayDateString() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   }
 
   void _addToRecentSongs(SongEntity song) {
