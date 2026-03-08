@@ -1,5 +1,6 @@
 import 'package:weplay_music_streaming/core/services/hive/hive_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weplay_music_streaming/core/services/playbar_manager.dart';
 import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
 import 'package:weplay_music_streaming/features/auth/data/datasources/auth_datasource.dart';
 import 'package:weplay_music_streaming/features/auth/data/models/auth_hive_model.dart';
@@ -60,6 +61,7 @@ final UserSessionService _userSessionService;
       try {
       await _hiveService.logoutUser();
       await _userSessionService.clearSession();
+      await PlaybarManager.instance.clearRecentSongs();
       return Future.value(true);
       } catch (e) {
         return Future.value(false);
