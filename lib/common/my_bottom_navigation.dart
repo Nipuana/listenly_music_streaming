@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:weplay_music_streaming/features/home/presentation/screens/home_screen.dart';
-import 'package:weplay_music_streaming/features/library/presentation/screens/library_screen.dart';
-import 'package:weplay_music_streaming/features/likes/presentation/screens/likes_screen.dart';
+import 'package:weplay_music_streaming/core/services/playbar_manager.dart';
+import 'package:weplay_music_streaming/common/playbar/playbar_overlay.dart';
+import 'package:weplay_music_streaming/features/user/presentation/home/screens/home_screen.dart';
+import 'package:weplay_music_streaming/features/user/presentation/library/screens/library_screen.dart';
+import 'package:weplay_music_streaming/features/user/presentation/likes/screens/likes_screen.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/screens/profile_screen.dart';
-import 'package:weplay_music_streaming/features/search/presentation/screens/search_screen.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
 
 class MyBottomNavigation extends StatefulWidget {
@@ -15,17 +16,73 @@ class MyBottomNavigation extends StatefulWidget {
 
 class _MyBottomNavigationState extends State<MyBottomNavigation> {
   int _selectedIndex = 0;
+  final manager = PlaybarManager.instance;
 
-  final List<Widget> lstBottomScreen = const [
-    HomeScreen(),
-    LikesScreen(),
-    SearchScreen(),
-    LibraryScreen(),
-    ProfileScreen(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    manager.addListener(_onPlaybarChanged);
+  }
+
+  void _onPlaybarChanged() => setState(() {});
+
+  @override
+  void dispose() {
+    manager.removeListener(_onPlaybarChanged);
+    super.dispose();
+  }
 
   void _onTab(int index) {
     setState(() => _selectedIndex = index);
+  }
+
+  Widget _getCurrentScreen() {
+    switch (_selectedIndex) {
+      case 0:
+        return HomeScreen(onNavigateToTab: _onTab);
+      case 1:
+        return const LikesScreen();
+      case 2:
+        return Navigator(
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+              builder: (context) => const LibraryScreen(),
+              settings: settings,
+            );
+          },
+        );
+      case 3:
+        return const ProfileScreen();
+      default:
+        return HomeScreen(onNavigateToTab: _onTab);
+    }
+  }
+
+  Future<void> _handlePopInvoked(bool didPop, Object? result) async {
+    if (didPop) return;
+    
+    // Show exit confirmation dialog
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Exit App'),
+        content: const Text('Are you sure you want to exit?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Exit'),
+          ),
+        ],
+      ),
+    );
+    
+    if (shouldExit == true && mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -38,8 +95,16 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
         isDark ? AppColors.darkTextSecondary : AppColors.textSecondary;
     final Color barColor = isDark ? AppColors.darkSurface : AppColors.surface;
 
-    return Scaffold(
-      body: lstBottomScreen[_selectedIndex],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _handlePopInvoked,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _getCurrentScreen(),
+            const PlaybarOverlay(),
+          ],
+        ),
       extendBody: true,
       floatingActionButton: _buildSearchButton(activeColor, barColor, isDark),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -77,7 +142,7 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
               icon: Icons.library_music_outlined,
               activeIcon: Icons.library_music_rounded,
               label: 'Library',
-              index: 3,
+              index: 2,
               activeColor: activeColor,
               inactiveColor: inactiveColor,
               isDark: isDark,
@@ -86,7 +151,7 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
               icon: Icons.person_outline_rounded,
               activeIcon: Icons.person_rounded,
               label: 'Profile',
-              index: 4,
+              index: 3,
               activeColor: activeColor,
               inactiveColor: inactiveColor,
               isDark: isDark,
@@ -94,42 +159,52 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
           ],
         ),
       ),
+    ),
     );
   }
 
   Widget _buildSearchButton(Color activeColor, Color barColor, bool isDark) {
-    final isSelected = _selectedIndex == 2;
-
     return Transform.translate(
       offset: const Offset(0, 5),
       child: GestureDetector(
-        onTap: () => _onTab(2),
-        child: Container(
-          width: 70,
-          height: 70,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                activeColor,
-                activeColor.withOpacity(0.8),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: activeColor.withOpacity(isSelected ? 0.5 : 0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+        onTap: () => PlaybarManager.instance.toggleOverlay(),
+        child: AnimatedBuilder(
+          animation: manager,
+          builder: (context, _) {
+            final overlayVisible = manager.overlayVisible;
+            final isPlaying = manager.isPlaying;
+            final iconData = overlayVisible
+                ? Icons.close_rounded
+                  : (isPlaying ? Icons.pause_rounded : Icons.arrow_upward_rounded);
+
+            return Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    activeColor,
+                    activeColor.withValues(alpha: 0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: activeColor.withValues(alpha: overlayVisible ? 0.5 : 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Icon(
-            Icons.search_rounded,
-            color: isDark ? AppColors.darkSurface : AppColors.surface,
-            size: 32,
-          ),
+              child: Icon(
+                iconData,
+                color: isDark ? AppColors.darkSurface : AppColors.surface,
+                size: 32,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -153,8 +228,8 @@ class _MyBottomNavigationState extends State<MyBottomNavigation> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => _onTab(index),
-          splashColor: activeColor.withOpacity(0.1),
-          highlightColor: activeColor.withOpacity(0.05),
+          splashColor: activeColor.withValues(alpha: 0.1),
+          highlightColor: activeColor.withValues(alpha: 0.05),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
