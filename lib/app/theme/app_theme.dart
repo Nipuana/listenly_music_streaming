@@ -81,7 +81,7 @@ class AppTheme {
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
-          shadowColor: AppColors.primary.withOpacity(0.3),
+          shadowColor: AppColors.primary.withValues(alpha: 0.3),
         ),
       ),
 
@@ -103,7 +103,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 2,
-        shadowColor: AppColors.primary.withOpacity(0.08),
+        shadowColor: AppColors.primary.withValues(alpha: 0.08),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: AppColors.border, width: 1),
