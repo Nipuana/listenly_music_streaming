@@ -4,6 +4,7 @@ import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
+import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
 import 'package:weplay_music_streaming/features/onboarding/presentation/screens/onboarding_screen.dart';
 
@@ -99,13 +100,7 @@ class ProfileLogoutButton extends ConsumerWidget {
           const OnboardingScreen(),
         );
       } else {
-        // Show error
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to logout. Please try again.'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        MysnackUtils.showError(context, 'Failed to logout. Please try again.');
       }
     }
   }

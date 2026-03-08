@@ -9,13 +9,31 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_radius.d
 import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_boxes.dart';
 import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
+import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/sections/header/widgets/profile_stat.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/sections/header/widgets/image_source_bottom_sheet.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/view_model/profile_view_model.dart';
 import 'package:weplay_music_streaming/features/profile/presentation/state/profile_state.dart';
+import 'package:weplay_music_streaming/features/user/domain/usecases/get_favorited_playlists_usecase.dart';
+import 'package:weplay_music_streaming/features/user/domain/usecases/get_liked_songs_usecase.dart';
+
+class ProfileHeaderStatData {
+  final String count;
+  final String label;
+
+  const ProfileHeaderStatData({
+    required this.count,
+    required this.label,
+  });
+}
 
 class ProfileHeader extends ConsumerStatefulWidget {
-  const ProfileHeader({super.key});
+  final List<ProfileHeaderStatData>? stats;
+
+  const ProfileHeader({
+    super.key,
+    this.stats,
+  });
 
   @override
   ConsumerState<ProfileHeader> createState() => _ProfileHeaderState();
@@ -27,11 +45,16 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
   String? _username;
   String? _email;
   String? _profilePicture;
+  int _likedSongsCount = 0;
+  int _favoritedPlaylistsCount = 0;
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    if (widget.stats == null) {
+      _loadProfileStats();
+    }
   }
 
   @override
@@ -39,6 +62,35 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
     super.didChangeDependencies();
     // Reload user data when the widget rebuilds (e.g., when navigating back)
     _loadUserData();
+    if (widget.stats == null) {
+      _loadProfileStats();
+    }
+  }
+
+  Future<void> _loadProfileStats() async {
+    final likedSongsUsecase = ref.read(getLikedSongsUsecaseProvider);
+    final favoritedPlaylistsUsecase = ref.read(getFavoritedPlaylistsUsecaseProvider);
+
+    final results = await Future.wait([
+      likedSongsUsecase(),
+      favoritedPlaylistsUsecase(),
+    ]);
+
+    final likedSongsResult = results[0];
+    final favoritedPlaylistsResult = results[1];
+
+    final likedSongsCount = likedSongsResult.fold((_) => 0, (songs) => songs.length);
+    final favoritedPlaylistsCount = favoritedPlaylistsResult.fold(
+      (_) => 0,
+      (playlists) => playlists.length,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _likedSongsCount = likedSongsCount;
+      _favoritedPlaylistsCount = favoritedPlaylistsCount;
+    });
   }
 
   void _loadUserData() {
@@ -200,24 +252,30 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
         setState(() {
           _selectedImage = null; // Clear selected image to show network image
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile picture updated successfully'),
-            backgroundColor: Colors.green,
-          ),
+        MysnackUtils.showSuccess(
+          context,
+          next.successMessage ?? 'Profile updated successfully',
         );
       } else if (next.status == ProfileStatus.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.errorMessage ?? 'Failed to update profile picture'),
-            backgroundColor: Colors.red,
-          ),
+        MysnackUtils.showError(
+          context,
+          next.errorMessage ?? 'Failed to update profile picture',
         );
       }
     });
     
     final profileState = ref.watch(profileViewModelProvider);
     final isLoading = profileState.status == ProfileStatus.loading;
+    final stats = widget.stats ?? [
+      ProfileHeaderStatData(
+        count: _likedSongsCount.toString(),
+        label: 'Liked Songs',
+      ),
+      ProfileHeaderStatData(
+        count: _favoritedPlaylistsCount.toString(),
+        label: 'Favorited Playlists',
+      ),
+    ];
     
     return Container(
       padding: AppSpacing.py8,
@@ -247,35 +305,52 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
                       ),
                     ],
                   ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: (_selectedImage != null || _profilePicture != null) 
-                          ? Colors.transparent 
-                          : primaryColor,
+                  child: SizedBox(
+                    width: AppSpacing.size20,
+                    height: AppSpacing.size20,
+                    child: ClipRRect(
                       borderRadius: AppRadius.full,
-                      image: _selectedImage != null
-                          ? DecorationImage(
-                              image: FileImage(File(_selectedImage!.path)),
+                      child: _selectedImage != null
+                          ? Image.file(
+                              File(_selectedImage!.path),
                               fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
                             )
-                          : _profilePicture != null && _profilePicture!.isNotEmpty
-                              ? DecorationImage(
-                                  image: NetworkImage(_getFullImageUrl(_profilePicture)),
+                          : (_profilePicture != null && _profilePicture!.isNotEmpty)
+                              ? Image.network(
+                                  _getFullImageUrl(_profilePicture),
                                   fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      color: primaryColor,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        _getInitials(_username ?? 'User'),
+                                        style: AppText.headline.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 )
-                              : null,
+                              : Container(
+                                  color: primaryColor,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    _getInitials(_username ?? 'User'),
+                                    style: AppText.headline.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                     ),
-                    alignment: Alignment.center,
-                    child: (_selectedImage == null && (_profilePicture == null || _profilePicture!.isEmpty))
-                        ? Text(
-                            _getInitials(_username ?? 'User'),
-                            style: AppText.headline.copyWith(
-                              color: Colors.white,
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : null,
                   ),
                 ),
                 Positioned(
@@ -333,16 +408,20 @@ class _ProfileHeaderState extends ConsumerState<ProfileHeader> {
               fontSize: 14,
             ),
           ),
-          AppSpacing.gap6,
-          // Stats Row
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ProfileStat(count: '125', label: 'Liked Songs'),
-              ProfileStat(count: '8', label: 'Playlists'),
-              ProfileStat(count: '45', label: 'Following'),
-            ],
-          ),
+          if (stats.isNotEmpty) ...[
+            AppSpacing.gap6,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: stats
+                  .map(
+                    (stat) => ProfileStat(
+                      count: stat.count,
+                      label: stat.label,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
         ],
       ),
     );

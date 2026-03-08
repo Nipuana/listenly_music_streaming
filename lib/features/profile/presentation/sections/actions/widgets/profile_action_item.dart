@@ -6,11 +6,15 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.
 class ProfileActionItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;
+  final bool showDivider;
 
   const ProfileActionItem({
     super.key,
     required this.icon,
     required this.label,
+    this.onTap,
+    this.showDivider = true,
   });
 
   @override
@@ -24,7 +28,7 @@ class ProfileActionItem extends StatelessWidget {
         Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {},
+            onTap: onTap,
             child: Padding(
               padding: AppSpacing.px4.add(AppSpacing.py3),
               child: Row(
@@ -54,14 +58,15 @@ class ProfileActionItem extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: AppSpacing.x4 + 40 + 12),
-          child: Divider(
-            height: 1,
-            thickness: 0.5,
-            color: textSecondary.withValues(alpha: 0.1),
+        if (showDivider)
+          Padding(
+            padding: EdgeInsets.only(left: AppSpacing.x4 + 40 + 12),
+            child: Divider(
+              height: 1,
+              thickness: 0.5,
+              color: textSecondary.withValues(alpha: 0.1),
+            ),
           ),
-        ),
       ],
     );
   }
