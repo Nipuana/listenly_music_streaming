@@ -2,19 +2,19 @@ import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:weplay_music_streaming/core/api/api_endpoints.dart';
+import 'package:weplay_music_streaming/core/services/auth/auth_session_manager.dart';
 
 // Provider for ApiClient
 final apiClientProvider = Provider<ApiClient>((ref) {
-  return ApiClient();
+  return ApiClient(ref: ref);
 });
 
 class ApiClient {
   late final Dio _dio;
 
-  ApiClient() {
+  ApiClient({required Ref ref}) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiEndpoints.baseUrl,
@@ -28,7 +28,11 @@ class ApiClient {
     );
 
     // Add interceptors
-    _dio.interceptors.add(_AuthInterceptor());
+    _dio.interceptors.add(
+      _AuthInterceptor(
+        authSessionManager: ref.read(authSessionManagerProvider),
+      ),
+    );
 
     // Auto retry on network failures
     _dio.interceptors.add(
@@ -139,8 +143,10 @@ class ApiClient {
 
 // Auth Interceptor to add JWT token to requests
 class _AuthInterceptor extends Interceptor {
-  final _storage = const FlutterSecureStorage();
-  static const String _tokenKey = 'auth_token';
+  final AuthSessionManager _authSessionManager;
+
+  _AuthInterceptor({required AuthSessionManager authSessionManager})
+      : _authSessionManager = authSessionManager;
 
   @override
   void onRequest(
@@ -151,6 +157,8 @@ class _AuthInterceptor extends Interceptor {
     final publicEndpoints = [
       ApiEndpoints.loginUser,
       ApiEndpoints.registerUser,
+      ApiEndpoints.requestPasswordReset,
+      'auth/reset-password',
     ];
 
     final isPublicGet =
@@ -159,11 +167,30 @@ class _AuthInterceptor extends Interceptor {
 
     final isAuthEndpoint =
         options.path == ApiEndpoints.loginUser ||
-        options.path == ApiEndpoints.registerUser;
+      options.path == ApiEndpoints.registerUser ||
+      options.path == ApiEndpoints.requestPasswordReset ||
+      options.path.startsWith('auth/reset-password');
 
     if (!isPublicGet && !isAuthEndpoint) {
-      final token = await _storage.read(key: _tokenKey);
+      final token = await _authSessionManager.readToken();
+
       if (token != null) {
+        if (await _authSessionManager.isTokenExpired()) {
+          await _authSessionManager.handleExpiredSession();
+          handler.reject(
+            DioException(
+              requestOptions: options,
+              response: Response(
+                requestOptions: options,
+                statusCode: 401,
+                data: {'message': 'Session expired. Please log in again.'},
+              ),
+              type: DioExceptionType.badResponse,
+            ),
+          );
+          return;
+        }
+
         options.headers['Authorization'] = 'Bearer $token';
       }
     }
@@ -175,9 +202,7 @@ class _AuthInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     // Handle 401 Unauthorized - token expired
     if (err.response?.statusCode == 401) {
-      // Clear token and redirect to login
-      _storage.delete(key: _tokenKey);
-      // You can add navigation logic here or use a callback
+      _authSessionManager.handleExpiredSession();
     }
     handler.next(err);
   }
