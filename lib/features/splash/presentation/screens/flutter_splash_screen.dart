@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/constants/app_constants/app_colors.dart';
+import 'package:weplay_music_streaming/core/services/auth/auth_session_manager.dart';
 import 'package:weplay_music_streaming/core/services/storage/user_session_service.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:weplay_music_streaming/features/artist/presentation/dashboard/screens/artist_dashboard_screen.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/screens/admin_mobile_unsupported_screen.dart';
+import 'package:weplay_music_streaming/features/user/presentation/dashboard/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/screens/login_screen.dart';
 
 class FlutterSplashScreen extends ConsumerStatefulWidget {
   final VoidCallback? onComplete;
@@ -77,10 +81,30 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
     if (!mounted) return;
 
     final userSessionService = ref.read(userSessionServiceProvider);
-    final isLoggedIn =  userSessionService.isLoggedIn();
-    
+    final authSessionManager = ref.read(authSessionManagerProvider);
+    final hasValidSession = await authSessionManager.hasValidSession();
+
+    if (!mounted) return;
+
+    final isLoggedIn = userSessionService.isLoggedIn();
+
+    if (isLoggedIn && !hasValidSession) {
+      AppRoutes.pushReplacement(context, const LoginScreen());
+      return;
+    }
+
     if (isLoggedIn) {
-      AppRoutes.pushReplacement(context, DashboardScreen());
+      // Check user role and navigate to appropriate dashboard
+      final userType = userSessionService.getUserType();
+
+      if (userType == 'admin') {
+        AppRoutes.pushReplacement(context, const AdminMobileUnsupportedScreen());
+      } else if (userType == 'artist') {
+        AppRoutes.pushReplacement(context, const ArtistDashboardScreen());
+      } else {
+        // Default to user dashboard for 'user' role or any other role
+        AppRoutes.pushReplacement(context, DashboardScreen());
+      }
     } else {
       AppRoutes.pushReplacement(context, OnboardingScreen());
     }
@@ -133,9 +157,9 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: accentColor.withOpacity(0.1),
+                          color: accentColor.withValues(alpha: 0.1),
                           border: Border.all(
-                            color: accentColor.withOpacity(0.2),
+                            color: accentColor.withValues(alpha: 0.2),
                             width: 2,
                           ),
                         ),
@@ -144,7 +168,7 @@ class _FlutterSplashScreenState extends ConsumerState<FlutterSplashScreen> with 
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: accentColor.withOpacity(0.2),
+                                color: accentColor.withValues(alpha: 0.2),
                                 blurRadius: 20,
                                 spreadRadius: 2,
                               ),
