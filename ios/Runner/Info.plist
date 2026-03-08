@@ -51,5 +51,18 @@
 		<string>This app requires camera access to take photos and videos.</string>
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>This app requires photo library access to select photos and videos.</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>com.weplay.weplay_music_streaming</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>weplay</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>
