@@ -81,7 +81,6 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
 
   @override
   Future<AuthApiModel?> getCurrentUser() {
-    // TODO: implement getCurrentUser
     throw UnimplementedError();
   }
 
@@ -104,20 +103,24 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
   @override
   Future<AuthApiModel> updateUser(AuthApiModel model, {String? filePath}) async {
     dynamic requestData;
+    final updateFields = <String, dynamic>{
+      if (model.username.trim().isNotEmpty) 'username': model.username.trim(),
+      if (model.email.trim().isNotEmpty) 'email': model.email.trim(),
+      if ((model.password ?? '').trim().isNotEmpty) 'password': model.password!.trim(),
+    };
     
     // If there's a file path, send as FormData for multer
     if (filePath != null && filePath.isNotEmpty) {
       requestData = FormData.fromMap({
-        if (model.username.isNotEmpty) 'username': model.username,
-        if (model.email.isNotEmpty) 'email': model.email,
+        ...updateFields,
         'profilePicture': await MultipartFile.fromFile(
           filePath,
           filename: filePath.split('/').last,
         ),
       });
     } else {
-      // Otherwise send as JSON
-      requestData = model.toJson();
+      // Otherwise send only the fields that are actually being updated.
+      requestData = updateFields;
     }
     
     final response = await _apiClient.put(
@@ -140,6 +143,39 @@ class AuthRemoteDatasource implements IAuthRemoteDatasource{
       return updatedUser;
     }
     return model;
+  }
+
+  @override
+  Future<String> requestPasswordReset(String email) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.requestPasswordReset,
+      data: {'email': email.trim()},
+    );
+
+    if (response.data['success'] == true) {
+      return response.data['message']?.toString() ??
+          'If the email is registered, a reset link has been sent.';
+    }
+
+    return response.data['message']?.toString() ?? 'Failed to send reset link';
+  }
+
+  @override
+  Future<String> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    final response = await _apiClient.post(
+      ApiEndpoints.resetPassword(token),
+      data: {'newPassword': newPassword},
+    );
+
+    if (response.data['success'] == true) {
+      return response.data['message']?.toString() ??
+          'Password has been reset successfully.';
+    }
+
+    return response.data['message']?.toString() ?? 'Failed to reset password';
   }
 
 

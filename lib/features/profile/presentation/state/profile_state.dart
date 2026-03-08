@@ -11,26 +11,30 @@ enum ProfileStatus {
 class ProfileState extends Equatable {
   final ProfileStatus status;
   final AuthEntity? authEntity;
+  final String? successMessage;
   final String? errorMessage;
 
   const ProfileState({
     this.status = ProfileStatus.initial,
     this.authEntity,
+    this.successMessage,
     this.errorMessage,
   });
 
   ProfileState copyWith({
     ProfileStatus? status,
     AuthEntity? authEntity,
+    String? successMessage,
     String? errorMessage,
   }) {
     return ProfileState(
       status: status ?? this.status,
       authEntity: authEntity ?? this.authEntity,
+      successMessage: successMessage ?? this.successMessage,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [status, authEntity, errorMessage];
+  List<Object?> get props => [status, authEntity, successMessage, errorMessage];
 }

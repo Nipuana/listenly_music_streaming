@@ -89,8 +89,9 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<Failure, bool>> logout() async{
     try{
-      final result = await _authLocalDatasource.logout();
-      if(result){
+      final remoteResult = await _authRemoteDatasource.logout();
+      final localResult = await _authLocalDatasource.logout();
+      if(remoteResult || localResult){
         return Right( true);
       }
       return Left(LocalDatabaseFailure (message: "Logout failed"));
@@ -150,6 +151,54 @@ class AuthRepository implements IAuthRepository {
       }
     } else {
       return Left(ApiFailure(message: "No internet connection"));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> requestPasswordReset(String email) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final message = await _authRemoteDatasource.requestPasswordReset(email);
+        return Right(message);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data['message'] ?? 'Failed to send reset link',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: 'No internet connection'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final message = await _authRemoteDatasource.resetPassword(
+          token: token,
+          newPassword: newPassword,
+        );
+        return Right(message);
+      } on DioException catch (e) {
+        return Left(
+          ApiFailure(
+            message: e.response?.data['message'] ?? 'Failed to reset password',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      } catch (e) {
+        return Left(ApiFailure(message: e.toString()));
+      }
+    } else {
+      return Left(ApiFailure(message: 'No internet connection'));
     }
   }
   }

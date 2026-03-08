@@ -18,16 +18,23 @@ class ProfileViewModel extends Notifier<ProfileState> {
   Future<void> updateUser({
     String? username,
     String? email,
+    String? password,
     String? profilePicture,
     String? filePath,
+    String? successMessage,
   }) async {
-    state = state.copyWith(status: ProfileStatus.loading);
+    state = state.copyWith(
+      status: ProfileStatus.loading,
+      successMessage: null,
+      errorMessage: null,
+    );
 
     await Future.delayed(const Duration(seconds: 1));
     
     final params = UpdateUserParams(
       username: username,
       email: email,
+      password: password,
       profilePicture: profilePicture,
       filePath: filePath,
     );
@@ -38,6 +45,7 @@ class ProfileViewModel extends Notifier<ProfileState> {
       (failure) {
         state = state.copyWith(
           status: ProfileStatus.error,
+          successMessage: null,
           errorMessage: failure.message,
         );
       },
@@ -45,6 +53,8 @@ class ProfileViewModel extends Notifier<ProfileState> {
         state = state.copyWith(
           status: ProfileStatus.success,
           authEntity: authEntity,
+          successMessage: successMessage ?? 'Profile updated successfully',
+          errorMessage: null,
         );
       },
     );
