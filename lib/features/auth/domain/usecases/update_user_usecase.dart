@@ -10,18 +10,20 @@ import 'package:weplay_music_streaming/features/auth/domain/repositories/auth_re
 class UpdateUserParams extends Equatable {
   final String? username;
   final String? email;
+  final String? password;
   final String? profilePicture;
   final String? filePath; // For image file upload
 
   const UpdateUserParams({
     this.username,
     this.email,
+    this.password,
     this.profilePicture,
     this.filePath,
   });
 
   @override
-  List<Object?> get props => [username, email, profilePicture, filePath];
+  List<Object?> get props => [username, email, password, profilePicture, filePath];
 }
 
 final updateUserUsecaseProvider = Provider<UpdateUserUsecase>((ref) {
@@ -40,6 +42,7 @@ class UpdateUserUsecase implements UsecaseWithParms<AuthEntity, UpdateUserParams
       username: params.username ?? '',
       email: params.email ?? '',
       userType: 'User',
+      password: params.password,
       profilePicture: params.profilePicture,
     );
     return _authRepository.updateUser(entity, filePath: params.filePath);
