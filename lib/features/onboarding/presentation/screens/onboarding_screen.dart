@@ -119,7 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: slideColor.withOpacity(0.3),
+                              color: slideColor.withValues(alpha: 0.3),
                               width: 2,
                             ),
                           ),
@@ -146,7 +146,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           slideSubtitle,
                           style: TextStyle(
                             fontSize: 16,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                             height: 1.5,
                           ),
                           textAlign: TextAlign.center,
@@ -171,7 +171,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     decoration: BoxDecoration(
                       color: _currentPage == index
                           ? theme.colorScheme.primary
-                          : theme.colorScheme.primary.withOpacity(0.3),
+                          : theme.colorScheme.primary.withValues(alpha: 0.3),
                       borderRadius: AppRadius.sm,
                     ),
                   ),

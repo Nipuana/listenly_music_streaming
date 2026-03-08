@@ -5,10 +5,12 @@ import 'package:weplay_music_streaming/core/constants/app_constants/app_spacing.
 import 'package:weplay_music_streaming/core/constants/app_constants/app_text.dart';
 import 'package:weplay_music_streaming/core/utils/mysnack_utils.dart';
 import 'package:weplay_music_streaming/core/widgets/text_field/app_text_field.dart';
+import 'package:weplay_music_streaming/features/artist/presentation/dashboard/screens/artist_dashboard_screen.dart';
+import 'package:weplay_music_streaming/features/auth/presentation/screens/admin_mobile_unsupported_screen.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/screens/signup_screen.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/state/auth_state.dart';
 import 'package:weplay_music_streaming/features/auth/presentation/view_model/auth_view_model.dart';
-import 'package:weplay_music_streaming/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:weplay_music_streaming/features/user/presentation/dashboard/screens/dashboard_screen.dart';
 import 'package:weplay_music_streaming/features/forgot_password/presentation/screens/forgot_password_screen.dart';
 import 'package:weplay_music_streaming/app/routes/app_routes.dart';
 import 'package:weplay_music_streaming/core/widgets/buttons/app_button.dart';
@@ -71,10 +73,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen<AuthState>(authViewModelProvider, (previous, next) {
       if(next.status == AuthStatus.authenticated){
-        AppRoutes.pushAndRemoveUntil(
-          context,
-          DashboardScreen()
-        );
+        // Check role and navigate to appropriate dashboard
+        final userType = next.authEntity?.userType;
+
+        if (userType == 'admin') {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const AdminMobileUnsupportedScreen()),
+            (route) => false,
+          );
+        } else if (userType == 'artist') {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const ArtistDashboardScreen()),
+            (route) => false,
+          );
+        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const DashboardScreen()),
+            (route) => false,
+          );
+        }
       } else if (next.status == AuthStatus.error && next.errorMessage != null){
         MysnackUtils.showError(
           context,
